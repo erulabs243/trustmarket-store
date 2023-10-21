@@ -1,39 +1,19 @@
 <script lang="ts">
-  import { loginSchema } from "$lib/schemas/authSchema";
-  import type { PageData } from "./$types";
   import { IconLock, IconUser } from "@tabler/icons-svelte";
-  import { superForm } from "sveltekit-superforms/client";
-  import SuperDebug from "sveltekit-superforms/client/SuperDebug.svelte";
-
-  export let data: PageData;
-  export let usernameInput = "";
-  export let passwordInput = "";
-
-  const { form, errors, enhance, constraints } = superForm(data.form, {
-    validators: loginSchema,
-  });
-  $: usernameInput = $errors.username ? "border-red-500" : "border-gray-500";
-  $: passwordInput = $errors.password ? "border-red-500" : "border-gray-500";
 </script>
-
-<SuperDebug data={$form} />
 
 <div>
   <header class="w-full">
     <h1 class="text-center text-2xl">Connextion</h1>
     <p class="text-center">Faites vos achats maintenant !</p>
   </header>
-  <form
-    method="post"
-    class="max-w-sm mx-auto my-16 flex flex-col gap-4"
-    use:enhance
-  >
+  <form method="post" class="max-w-sm mx-auto my-16 flex flex-col gap-4">
     <div class="form-control">
       <label class="label" for="username">
         <span class="label-text">Utilisateur/email</span>
       </label>
       <div
-        class="join items-center gap-2 bg-white px-4 border rounded-3xl {usernameInput}"
+        class="join items-center gap-2 bg-white px-4 border rounded-3xl border-gray-500"
       >
         <IconUser />
         <input
@@ -41,14 +21,8 @@
           name="username"
           class="input w-full focus:outline-none px-0"
           placeholder="utilisateur"
-          bind:value={$form.username}
         />
       </div>
-      {#if $errors.username}
-        <label class="label">
-          <span class="label-text-alt text-red-500">{$errors.username}</span>
-        </label>
-      {/if}
     </div>
     <div class="form-control">
       <label class="label" for="password">
@@ -60,21 +34,15 @@
         </span>
       </label>
       <div
-        class="join items-center gap-2 bg-white px-4 border rounded-3xl {passwordInput}"
+        class="join items-center gap-2 bg-white px-4 border rounded-3xl border-gray-500"
       >
         <IconLock />
         <input
           type="password"
           name="password"
           class="input w-full focus:outline-none px-0"
-          placeholder="********"
         />
       </div>
-      {#if $errors.password}
-        <label class="label">
-          <span class="label-text-alt text-red-500">{$errors.password}</span>
-        </label>
-      {/if}
     </div>
     <div class="flex items-center justify-between">
       <button class="btn btn-primary rounded-3xl" type="submit">

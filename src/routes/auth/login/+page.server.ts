@@ -1,21 +1,25 @@
 import type { PageServerLoad, Actions } from "./$types";
+import { z } from "zod";
+import { superValidate } from "sveltekit-superforms/server";
+import { fail } from "@sveltejs/kit";
+import { loginSchema } from "$lib/schemas/authSchema";
 
-export const load = (async ({cookies}) => {
+export const load = (async () => {
+	const form = await superValidate(loginSchema);
 
-  const email = cookies.get("email");
-  
-  return {
-    title: email
-  }
+	return {
+		form,
+	};
 }) satisfies PageServerLoad;
 
 export const actions = {
-  default: async ({request, cookies}) => {
-    const form = await request.formData();
-    const email = form.get("email") as string;
-    const password = form.get("password") as string;
+	default: async ({ request }) => {
+		const form = await superValidate(request, loginSchema);
 
-    console.info(email, password);
-    cookies.set("email", email);
-  }
+		if (!form.valid) {
+			return fail(400, { form });
+		}
+
+		return { form };
+	},
 } satisfies Actions;
