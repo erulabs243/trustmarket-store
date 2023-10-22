@@ -1,10 +1,10 @@
 import api from "$lib/server/apiClient";
-import type { ProductRes } from "$lib/types/apiResponse";
+import type { CartRes, ProductRes, RegionsRes } from "$lib/types/apiResponse";
 import { fail } from "@sveltejs/kit";
-import { superValidate } from "sveltekit-superforms/server";
+import { message, superValidate } from "sveltekit-superforms/server";
 import type { Actions, PageServerLoad } from "./$types";
-import type { ProductType } from "$lib/types/apiType";
-import {  addToCartSchema } from "$lib/schemas/storeSchema";
+import type { ProductType, RegionType } from "$lib/types/apiType";
+import { addToCartSchema } from "$lib/schemas/storeSchema";
 
 export const load = (async ({ params }) => {
 	const slug = params.product;
@@ -31,7 +31,7 @@ export const load = (async ({ params }) => {
 	}
 
 	// Use redis session to store cart
-	const form = await superValidate(addToCartSchema)
+	const form = await superValidate(addToCartSchema);
 
 	return {
 		product,
@@ -40,20 +40,78 @@ export const load = (async ({ params }) => {
 	};
 }) satisfies PageServerLoad;
 
+type Message = {
+	status: "error" | "success";
+	text: string;
+	cart?: string;
+};
+
 export const actions = {
 	default: async ({ request }) => {
-		const form = await superValidate(request, addToCartSchema);
+		const formData = await request.formData();
+		const form = await superValidate<typeof addToCartSchema, Message>(
+			formData,
+			addToCartSchema,
+		);
 
-		if(!form.valid) {
-			return fail(400, { form });
+		if (!form.valid) {
+			//return fail(400, { form });
+			return message(form, { text: "Formulaire invalide", status: "error" });
 		}
 
-		console.log(form.data.quantity);
+		if (!formData.has("variant")) {
+			return message(form, {
+				status: "error",
+				text: "Veuillez choisir un modèle",
+			});
+		}
 
 		// Create cart if not in sessionstorage
+		let cartId = formData.has("cart") ? formData.get("cart") : "";
+		if (!cartId) {
+			//Get regions
+			const regions = (await api.get("regions").json()) as RegionsRes;
+			const region = regions.regions[0];
 
+			const newCart = (await api
+				.post("carts", {
+					json: { region_id: region.id },
+				})
+				.json()) as CartRes;
+
+			if (!newCart) {
+				//return fail(400, {form});
+				return message(form, {
+					text: "Impossible de créer votre panier",
+					status: "error",
+				});
+			}
+
+			cartId = newCart.cart.id;
+		}
 		//Add line item to cart
 
-		return { form };
-	}
+		const cart = (await api
+			.post(`carts/${cartId}/line-items`, {
+				json: {
+					variant_id: formData.get("variant"),
+					quantity: Number(form.data.quantity),
+				},
+			})
+			.json()) as CartRes;
+
+		if (!cart) {
+			//return fail(400, {form});
+			return message(form, {
+				text: "Impossible d'ajouter le produit au panier",
+				status: "error",
+			});
+		}
+
+		return message(form, {
+			text: "Produit ajouté au panier",
+			status: "success",
+			cart: cart.cart.id,
+		});
+	},
 } satisfies Actions;

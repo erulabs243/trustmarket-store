@@ -1,18 +1,17 @@
-
 import { browser } from "$app/environment";
 import type { CartType, LineItemType } from "$lib/types/apiType";
-import { writable } from "svelte/store";
+import { getContext, setContext } from "svelte";
+import { writable, type Writable } from "svelte/store";
 
-//const cartStore = writable<string>("");
+type Context = Writable<string>;
+type CartStore = string;
 
-//cartStore.subscribe(
- // (val) => browser && sessionStorage.setItem("cart", val)
-//);
+export const setCart = (id: string) => {
+  const cart = writable<CartStore>(id);
+  if (browser){
+    sessionStorage.setItem("cart", id);
+  }
+  setContext("cart", cart);
+}
 
-const cartStore = writable<string>("");
-
-cartStore.subscribe(
-  (cart) => browser && sessionStorage.setItem("cart", cart)
-);
-
-export default cartStore;
+export const getCart = () => getContext<Context>("cart");

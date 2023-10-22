@@ -4,6 +4,7 @@ import type {
 	CollectionType,
 	CustomerType,
 	ProductType,
+	RegionType,
 	ShippingOptionType,
 	VariantType,
 } from "./apiType";
@@ -53,4 +54,11 @@ export interface VariantsRes {
 
 export interface CustomerRes {
 	customer: CustomerType;
+}
+
+export interface RegionsRes {
+	regions: RegionType[];
+	count: number;
+	offset: number;
+	limit: number;
 }

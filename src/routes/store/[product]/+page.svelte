@@ -1,19 +1,23 @@
 <script lang="ts">
   import ProductCard from "$lib/components/ProductCard.svelte";
   import { displayCurrency } from "$lib/utils/lang";
-  import { IconShoppingBagPlus } from "@tabler/icons-svelte";
+  import { IconInfoCircle, IconShoppingBagPlus } from "@tabler/icons-svelte";
   import type { PageData } from "./$types";
   import { superForm } from "sveltekit-superforms/client";
   import { addToCartSchema } from "$lib/schemas/storeSchema";
-  import SuperDebug from "sveltekit-superforms/client/SuperDebug.svelte";
+  import { browser } from "$app/environment";
 
   export let data: PageData;
   export let { product, related } = data;
   export let variant: number = 0;
   export let image: number = 0;
 
-  const { form, errors, enhance } = superForm(data.form, {
+  const { form, errors, enhance, message, delayed } = superForm(data.form, {
     validators: addToCartSchema,
+    onSubmit: ({ formData }) => {
+      formData.set("variant", product.variants[variant].id);
+      formData.set("cart", localStorage.getItem("__tm__cart") ?? "");
+    },
   });
 
   const changeVariant = (id: number) => (variant = id);
@@ -102,11 +106,22 @@
           {/each}
         </nav>
       </div>
-      <SuperDebug data={$form} />
       <form method="post" use:enhance>
+        {#if $message}
+          <span class="hidden"
+            >{localStorage.setItem("__tm__cart", $message.cart)}</span
+          >
+          <div
+            class={` my-4 alert ${
+              $message.status == "error" ? "alert-error" : "alert-success"
+            }`}
+          >
+            <IconInfoCircle />
+            <span>{$message.text}</span>
+          </div>
+        {/if}
         <div class="flex items-end gap-4">
           <div class="form-control w-1/3">
-            <input type="hidden" bind:value={$form.cart} />
             {#if $errors.quantity}
               <label class="label" for="quantity">
                 <span class="label-text-alt text-red-500">
@@ -123,9 +138,18 @@
               bind:value={$form.quantity}
             />
           </div>
-          <button class="btn btn-primary w-2/3 rounded-3xl">
+          <button
+            type="submit"
+            class={`btn btn-primary w-2/3 rounded-3xl ${
+              $delayed ? "btn-disabled" : ""
+            }`}
+          >
             Ajouter au panier
-            <IconShoppingBagPlus />
+            {#if $delayed}
+              <span class="loading loading-spinner" />
+            {:else}
+              <IconShoppingBagPlus />
+            {/if}
           </button>
         </div>
       </form>
