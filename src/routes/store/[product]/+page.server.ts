@@ -1,8 +1,10 @@
 import api from "$lib/server/apiClient";
 import type { ProductRes } from "$lib/types/apiResponse";
 import { fail } from "@sveltejs/kit";
-import type { PageServerLoad } from "./$types";
+import { superValidate } from "sveltekit-superforms/server";
+import type { Actions, PageServerLoad } from "./$types";
 import type { ProductType } from "$lib/types/apiType";
+import {  addToCartSchema } from "$lib/schemas/storeSchema";
 
 export const load = (async ({ params }) => {
 	const slug = params.product;
@@ -28,8 +30,30 @@ export const load = (async ({ params }) => {
 		}
 	}
 
+	// Use redis session to store cart
+	const form = await superValidate(addToCartSchema)
+
 	return {
 		product,
 		related: relatedByCollection,
+		form,
 	};
 }) satisfies PageServerLoad;
+
+export const actions = {
+	default: async ({ request }) => {
+		const form = await superValidate(request, addToCartSchema);
+
+		if(!form.valid) {
+			return fail(400, { form });
+		}
+
+		console.log(form.data.quantity);
+
+		// Create cart if not in sessionstorage
+
+		//Add line item to cart
+
+		return { form };
+	}
+} satisfies Actions;

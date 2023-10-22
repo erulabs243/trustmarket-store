@@ -1,12 +1,20 @@
 <script lang="ts">
   import ProductCard from "$lib/components/ProductCard.svelte";
+  import { displayCurrency } from "$lib/utils/lang";
+  import { IconShoppingBagPlus } from "@tabler/icons-svelte";
   import type { PageData } from "./$types";
+  import { superForm } from "sveltekit-superforms/client";
+  import { addToCartSchema } from "$lib/schemas/storeSchema";
+  import SuperDebug from "sveltekit-superforms/client/SuperDebug.svelte";
 
   export let data: PageData;
   export let { product, related } = data;
   export let variant: number = 0;
   export let image: number = 0;
-  export let quantity: number = 1;
+
+  const { form, errors, enhance } = superForm(data.form, {
+    validators: addToCartSchema,
+  });
 
   const changeVariant = (id: number) => (variant = id);
   const changeImage = (id: number) => (image = id);
@@ -18,7 +26,7 @@
     {product.title}
   </h1>
   <div class="flex gap-12">
-    <aside class="flex gap-4">
+    <aside class="flex gap-4 flex-1">
       <div class="flex flex-col gap-2">
         {#each product.images as img, id}
           <button
@@ -28,7 +36,7 @@
             <img
               src={img.url}
               alt={product.title}
-              class="rounded-xl h-20 hover:cursor-pointer"
+              class="rounded-xl h-28 hover:cursor-pointer"
             />
           </button>
         {/each}
@@ -36,8 +44,91 @@
       <img
         src={product.images[image].url}
         alt={product.title}
-        class="rounded-xl h-96 w-96 object-cover"
+        class="rounded-xl h-96 object-cover"
       />
+    </aside>
+    <aside class="flex flex-col gap-4 flex-1">
+      <h2>{product.title}</h2>
+      <div class="flex items-center">
+        <p>
+          <span
+            >{displayCurrency(product.variants[variant].prices[0].amount)}</span
+          >
+          <!-- TODO setting product discount -->
+        </p>
+      </div>
+      {#if product.description}
+        <p>{product.description}</p>
+      {/if}
+
+      {#if product.categories && product.categories.length > 0}
+        <div>
+          <p>Catégories</p>
+          <nav class="join gap-2">
+            {#each product.categories as category}
+              <a
+                href={`/store/categories/${category.handle}`}
+                class="btn btn-outline btn-secondary btn-sm rounded-xl"
+                >{category.name}</a
+              >
+            {/each}
+          </nav>
+        </div>
+      {/if}
+
+      {#if product.collection_id}
+        <p>
+          <span>Collection</span>
+          <a
+            href={`/store/collections/${product.collection.handle}`}
+            class="btn btn-outline btn-sm btn-secondary rounded-xl"
+            >{product.collection.title}</a
+          >
+        </p>
+      {/if}
+
+      <div>
+        <p>Modèles</p>
+        <nav class="join flex-wrap gap-2">
+          {#each product.variants as model, id}
+            <button
+              class={`btn ${
+                variant !== id ? "btn-outline btn-neutral" : "btn-primary"
+              } rounded-xl`}
+              on:click={() => changeVariant(id)}
+            >
+              {model.title}
+            </button>
+          {/each}
+        </nav>
+      </div>
+      <SuperDebug data={$form} />
+      <form method="post" use:enhance>
+        <div class="flex items-end gap-4">
+          <div class="form-control w-1/3">
+            <input type="hidden" bind:value={$form.cart} />
+            {#if $errors.quantity}
+              <label class="label" for="quantity">
+                <span class="label-text-alt text-red-500">
+                  {$errors.quantity}
+                </span>
+              </label>
+            {/if}
+            <input
+              type="number"
+              class={`input input-bordered rounded-3xl ${
+                $errors.quantity ? "input-error" : ""
+              }`}
+              name="quantity"
+              bind:value={$form.quantity}
+            />
+          </div>
+          <button class="btn btn-primary w-2/3 rounded-3xl">
+            Ajouter au panier
+            <IconShoppingBagPlus />
+          </button>
+        </div>
+      </form>
     </aside>
   </div>
 </section>

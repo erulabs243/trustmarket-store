@@ -9,7 +9,7 @@
   export let usernameInput = "";
   export let passwordInput = "";
 
-  const { form, errors, enhance, constraints } = superForm(data.form, {
+  const { form, errors, enhance } = superForm(data.form, {
     validators: loginSchema,
   });
   $: usernameInput = $errors.username ? "border-red-500" : "border-gray-500";

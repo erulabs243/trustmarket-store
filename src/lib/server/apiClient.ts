@@ -1,7 +1,7 @@
 import ky from "ky";
 
 const api = ky.create({
-	prefixUrl: "http://192.168.122.1:9000/store/",
+	prefixUrl: "http://192.168.1.124:9000/store/",
 });
 
 api.extend({

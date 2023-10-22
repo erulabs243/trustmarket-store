@@ -7,7 +7,24 @@
   export let data: PageData;
   export let products = data.products;
   export let collections = data.collections;
+  export let latest = data.collections.collections[0];
 </script>
+
+<!-- LATEST COLLECTION -->
+<div class="flex flex-col gap-4 my-24 bg-orange-300 rounded-3xl p-24">
+  <h2>{latest.title}</h2>
+  {#if latest.metadata?.description}
+    <p>{latest.metadata.description}</p>
+  {/if}
+  <a
+    href={`/store/collections/${latest.handle}`}
+    class="btn btn-secondary rounded-3xl self-start my-8"
+  >
+    Voir la collection
+    <IconArrowRight />
+  </a>
+</div>
+<!-- END LATEST COLLECTION -->
 
 <!-- RECENT PRODUCTS -->
 <div class="flex flex-col gap-20 my-20">
