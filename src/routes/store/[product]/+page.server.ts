@@ -114,8 +114,8 @@ export const actions = {
 			httpOnly: true,
 			secure: false,
 			sameSite: "lax",
-			maxAge: 60 * 60 * 24 * 7
-		})
+			maxAge: 60 * 60 * 24 * 7,
+		});
 
 		return message(form, {
 			text: "Produit ajouté au panier",

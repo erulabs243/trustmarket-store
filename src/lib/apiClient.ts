@@ -9,7 +9,7 @@ api.extend({
 		beforeRequest: [
 			(request) => {
 				console.log("Request", request);
-			}
+			},
 		],
 		beforeError: [
 			(error) => {

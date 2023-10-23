@@ -1,27 +1,14 @@
 <script lang="ts">
-  import api from "$lib/apiClient";
   import CartItem from "$lib/components/CartItem.svelte";
-  import type { CartRes } from "$lib/types/apiResponse";
-  import type { CartType } from "$lib/types/apiType";
   import { displayCurrency } from "$lib/utils/lang";
   import { IconAlertTriangle, IconShoppingBag } from "@tabler/icons-svelte";
-  import { onMount } from "svelte";
   import type { PageData } from "./$types";
+  import Login from "$lib/components/Login.svelte";
 
   export let data: PageData;
 
   $: cart = data.cart;
-
-  /*  onMount(async () => {
-    const cartId = localStorage.getItem("__tm__cart") ?? "";
-    if (!cartId) {
-      cart = null;
-    } else {
-      const cartRes = (await api.get(`carts/${cartId}`).json()) as CartRes;
-      if (!cartRes) cart = null;
-      else cart = cartRes.cart;
-    }
-  });*/
+  $: user = data.user;
 </script>
 
 <div>
@@ -96,10 +83,14 @@
             class="btn btn-outline btn-secondary rounded-3xl"
             >Continuer les achats</a
           >
-          <button class="btn btn-primary rounded-3xl">
-            Commander maintenant
-            <IconShoppingBag />
-          </button>
+          {#if !user}
+            <Login label="Commander maintenant" />
+          {:else}
+            <button class="btn btn-primary rounded-3xl">
+              Commander maintenant
+              <IconShoppingBag />
+            </button>
+          {/if}
         </nav>
       </footer>
     </div>

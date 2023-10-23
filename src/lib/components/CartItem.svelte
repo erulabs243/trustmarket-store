@@ -1,7 +1,6 @@
 <script lang="ts">
   import { invalidateAll } from "$app/navigation";
   import api from "$lib/apiClient";
-  import type { CartRes } from "$lib/types/apiResponse";
   import type { LineItemType } from "$lib/types/apiType";
   import { displayCurrency } from "$lib/utils/lang";
   import { fail } from "@sveltejs/kit";
@@ -13,10 +12,20 @@
   let processing: Processing = null;
   let qty: number = item.quantity;
 
+  //Update line item in cart
   const updateCart = async () => {
-    console.log(`${item.title}, ${qty}`);
+    processing = "updating";
+    const url = `carts/${item.cart_id}/line-items/${item.id}`;
+    const res = await api.post(url, { json: { quantity: Number(qty) } }).json();
+
+    if (!res)
+      throw fail(400, { text: "Impossible de mettre à jour votre panier." });
+
+    invalidateAll();
+    processing = null;
   };
 
+  //Delete line item from cart
   const deleteItem = async () => {
     processing = "deleting";
     const url = `carts/${item.cart_id}/line-items/${item.id}`;
@@ -48,12 +57,12 @@
       </button>
     </div>
     <div class="w-1/6">
-      <form method="post">
+      <form>
         <div class="flex gap-2 w-full justify-center">
           <div class="form-control w-3/4">
             <input
               type="number"
-              value={item.quantity.toString()}
+              bind:value={qty}
               name="quantity"
               class="input input-bordered bg-base-200"
             />
