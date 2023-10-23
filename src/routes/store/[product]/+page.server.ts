@@ -47,7 +47,7 @@ type Message = {
 };
 
 export const actions = {
-	default: async ({ request }) => {
+	default: async ({ request, cookies }) => {
 		const formData = await request.formData();
 		const form = await superValidate<typeof addToCartSchema, Message>(
 			formData,
@@ -67,7 +67,8 @@ export const actions = {
 		}
 
 		// Create cart if not in sessionstorage
-		let cartId = formData.has("cart") ? formData.get("cart") : "";
+		//let cartId = formData.has("cart") ? formData.get("cart") : "";
+		let cartId = cookies.get("__tm__cart") ?? "";
 		if (!cartId) {
 			//Get regions
 			const regions = (await api.get("regions").json()) as RegionsRes;
@@ -107,6 +108,14 @@ export const actions = {
 				status: "error",
 			});
 		}
+
+		cookies.set("__tm__cart", cart.cart.id, {
+			path: "/",
+			httpOnly: true,
+			secure: false,
+			sameSite: "lax",
+			maxAge: 60 * 60 * 24 * 7
+		})
 
 		return message(form, {
 			text: "Produit ajouté au panier",
