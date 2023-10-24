@@ -1,5 +1,12 @@
 <script lang="ts">
+    import type { UserSession } from "$lib/types/commons";
   import { IconSearch, IconShoppingBag } from "@tabler/icons-svelte";
+    import Login from "./Login.svelte";
+    import { enhance } from "$app/forms";
+    import { goto } from "$app/navigation";
+
+  export let user: UserSession | null;
+
 </script>
 
 <div class="navbar bg-base-100">
@@ -9,8 +16,8 @@
   <div class="navbar-center hidden lg:flex">
     <ul class="menu menu-horizontal px-1">
       <li><a href="/">Accueil</a></li>
-      <li><a href="/categories">Nos catégories</a></li>
-      <li><a href="/collections">Nos collections</a></li>
+      <li><a href="/store/categories">Nos catégories</a></li>
+      <li><a href="/store/collections">Nos collections</a></li>
     </ul>
   </div>
   <div class="navbar-end justify-end gap-4">
@@ -28,6 +35,7 @@
     <a href="/cart" class="btn btn-ghost btn-circle">
       <IconShoppingBag />
     </a>
+    {#if user}
     <div class="dropdown dropdown-end">
       <label tabindex="0" class="btn btn-ghost btn-circle avatar">
         <div class="w-10 rounded-full">
@@ -45,8 +53,16 @@
           </a>
         </li>
         <li><a>Settings</a></li>
-        <li><a>Logout</a></li>
+        
+          <form method="post" action="/auth?/logout" use:enhance>
+            <button type="submit" class=" mt-4 btn btn-sm btn-error btn-outline rounded-3xl w-full">Déconnexion</button>
+          </form>
+        
       </ul>
     </div>
+    {:else}
+      <Login label="Connexion" />
+    {/if}
+    
   </div>
 </div>

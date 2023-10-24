@@ -27,6 +27,19 @@
   let phone: string = "";
 
   let loading: boolean = false;
+
+  const formError = (field: string, errors: Array<{field: string; message: string}>) => {
+    if(errors){
+      const error = errors.find(item => 
+        item.field === field
+      );
+
+      return error;
+    }
+
+
+    return null;
+  };
 </script>
 
 <button class="btn btn-primary rounded-3xl" onclick="loginForm.showModal()">
@@ -134,17 +147,21 @@
             loading = true;
 
             return async ({ result, update }) => {
+
+              console.log(result);
+
               if (result.status === 200) {
                 invalidateAll();
+                document.querySelector("#loginForm").close();
+                loading = false;
+                await update();
                 //const d = document.querySelector("#loginForm");
                 //d.close();
               } else {
-                console.log(result);
                 registrationData = result;
+                loading = false;
+                await update();
               }
-
-              loading = false;
-              await update();
             };
           }}
         >
@@ -152,11 +169,17 @@
             {#if registrationData.status === 400}
               <div class="alert alert-error my-4">
                 <IconAlertTriangle />
-                <span>Identifiants incorrectes</span>
+                <span>Une erreur lors de la création de votre compte. Veuillez réessayer...</span>
+              </div>
+            {:else if registrationData.status === 422}
+              <div class="alert alert-error my-4">
+                <IconAlertTriangle />
+                <span>Adresse e-mail déjà utilisée</span>
               </div>
             {/if}
           {/if}
           <div class="flex flex-col gap-4">
+      
             <div class="form-control">
               <div
                 class="join items-center gap-2 bg-white px-4 border rounded-3xl"
@@ -170,11 +193,14 @@
                   bind:value={email}
                 />
               </div>
-              {#if registrationData.data.error.}
-              	
-              {/if}
+            {#if registrationData && formError("email", registrationData.data.errors)}
+            <div class="label">
+              <span class="label-text-alt text-red-500">{formError("email", registrationData?.data.errors)?.message}</span>
+            </div>
+            {/if}
             </div>
             <div class="form-control">
+      
               <div
                 class="join items-center gap-2 bg-white px-4 border rounded-3xl"
               >
@@ -187,9 +213,16 @@
                   bind:value={firstName}
                 />
               </div>
+              {#if registrationData && formError("firstName", registrationData.data.errors)}
+              <div class="label">
+              	<span class="label-text-alt text-red-500">
+                  {formError("firstName", registrationData.data.errors)?.message}
+                </span>
+              </div>
+              {/if}
             </div>
             <div class="form-control">
-              <div
+        <div
                 class="join items-center gap-2 bg-white px-4 border rounded-3xl"
               >
                 <IconUser />
@@ -201,6 +234,11 @@
                   bind:value={lastName}
                 />
               </div>
+              {#if registrationData && formError("lastName", registrationData.data.errors)}
+              <div class="label">
+              	<span class="label-text-alt text-red-500">{formError("lastName", registrationData.data.errors)?.message}</span>
+              </div>
+              {/if}
             </div>
             <div class="form-control">
               <div
@@ -215,6 +253,13 @@
                   bind:value={phone}
                 />
               </div>
+              {#if registrationData && formError("phone", registrationData.data.errors)}
+                <div class="label">
+                  <span class="label-text-alt text-red-500">      	
+                    Numéro de téléphone est invalide
+                  </span>
+                </div>
+              {/if}
             </div>
             <div class="form-control">
               <div
@@ -229,6 +274,13 @@
                   bind:value={password}
                 />
               </div>
+              {#if registrationData && formError("password", registrationData.data.errors)}
+                <div class="label">
+                  <span class="label-text-alt text-red-500">
+                    Choisissez un mot de passe avec au moins 8 caractères, 1 lettre majuscule, 1 lettre miniscule, 1 caractère spécial et 1 chiffre.
+                  </span>
+                </div>
+              {/if}
             </div>
             <button
               type="submit"
