@@ -1,11 +1,14 @@
 <script lang="ts">
   import CartItem from "$lib/components/CartItem.svelte";
   import { displayCurrency } from "$lib/utils/lang";
-  import { IconAlertTriangle, IconShoppingBag } from "@tabler/icons-svelte";
+  import { IconAlertTriangle, IconArrowRight, IconShoppingBag } from "@tabler/icons-svelte";
   import type { PageData } from "./$types";
+  import userStore from "$lib/stores/user";
   import Login from "$lib/components/Login.svelte";
 
   export let data: PageData;
+
+  console.log(data.cart);
 
   $: cart = data.cart;
   $: user = data.user;
@@ -14,7 +17,9 @@
 <div>
   <h1>Mon panier</h1>
   {#if !cart}
-    <p>Chargement</p>
+    <div class="alert alert-warning">
+      <p>Aucun produit dans votre panier</p>
+</div>
   {:else if cart && cart.cart.items.length === 0}
     <div class="flex flex-col gap-4 items-center">
       <div class="alert alert-warning">
@@ -83,13 +88,13 @@
             class="btn btn-outline btn-secondary rounded-3xl"
             >Continuer les achats</a
           >
-          {#if !user}
+          {#if !$userStore}
             <Login label="Commander maintenant" from="cart" />
           {:else}
-            <button class="btn btn-primary rounded-3xl">
-              Commander maintenant
-              <IconShoppingBag />
-            </button>
+            <a href="/cart/shipping" class="btn btn-primary rounded-3xl">
+              Adresse de livraison
+              <IconArrowRight />
+            </a>
           {/if}
         </nav>
       </footer>

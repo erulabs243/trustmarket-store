@@ -11,6 +11,7 @@
   type Processing = "deleting" | "updating" | null;
 
   export let item: LineItemType;
+  
   let processing: Processing = null;
   let qty: number = item.quantity;
 
@@ -54,6 +55,7 @@
       class="max-w-32 max-h-32 object-cover rounded-xl"
     />
   </figure>
+
   <div class="flex items-center gap-4 w-full">
     <div class="w-2/6">
       <h3>{item.title}</h3>

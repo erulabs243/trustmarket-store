@@ -43,9 +43,11 @@
 
     return null;
   };
+
+  // FIXME Redirect to shipping after login if from cart
 </script>
 
-<button class="btn btn-primary rounded-3xl" onclick="loginForm.showModal()">
+<button class="btn btn-primary rounded-3xl" on:click={() => document.querySelector("#loginForm").showModal()}>
   {label}
 </button>
 
@@ -79,7 +81,7 @@
                 $userStore = result.data.user;
                 invalidateAll();
                 document.querySelector("#loginForm").close();
-                if(from === "cart") goto("/cart?step=shipping");
+                if(from === "cart") goto("/cart/shipping");
                 //const d = document.querySelector("#loginForm");
                 //d.close();
               } else {
@@ -158,7 +160,7 @@
                 $userStore = result.data.user;
                 invalidateAll();
                 document.querySelector("#loginForm").close();
-                if(from === "cart") goto("/cart?step=shipping");
+                if(from === "cart") goto("/cart/shipping");
                 loading = false;
                 await update();
                 //const d = document.querySelector("#loginForm");

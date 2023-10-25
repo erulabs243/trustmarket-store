@@ -1,17 +1,25 @@
 <script lang="ts">
-    import { page } from "$app/stores";
   import Navbar from "$lib/components/Navbar.svelte";
     import userStore from "$lib/stores/user";
     import { onDestroy } from "svelte";
   import "../app.css";
   import type { LayoutData } from "./$types";
     import { cartStore, cartTotalStore } from "$lib/stores/cart";
+    import type { LineItemType } from "$lib/types/apiType";
+    import type { UserSession } from "$lib/types/commons";
 
   export let data: LayoutData;
+  let cart: Array<LineItemType>;
+  let cartTotal: number;
+  let user: UserSession | null;
+  
+  $cartStore = data.cart?.cart.items ?? [];
+  $cartTotalStore = Number(data.cart?.cart.total) ?? 0;
+  $userStore = data.user ? JSON.parse(data.user) : null;
 
-  const unsubcribe = userStore.subscribe(() => null);
-  const unsubscribeCart = cartStore.subscribe(() => null);
-  const unsubscribeTotal = cartTotalStore.subscribe(() => null);
+  const unsubscribeCart = cartStore.subscribe((value) => cart = value);
+  const unsubscribeTotal = cartTotalStore.subscribe((value) => cartTotal = value);
+  const unsubcribe = userStore.subscribe((value) => user = value);
   onDestroy(unsubcribe);
   onDestroy(unsubscribeCart);
   onDestroy(unsubscribeTotal);

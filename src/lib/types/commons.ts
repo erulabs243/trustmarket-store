@@ -3,4 +3,5 @@ export interface UserSession {
 	email: string;
 	lastLogged: string;
 	isLogged: string;
+	cookieId?: string;
 }

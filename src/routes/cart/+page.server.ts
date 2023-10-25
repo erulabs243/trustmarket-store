@@ -7,7 +7,12 @@ export const load = (async ({ cookies }) => {
 	const user = cookies.get("__tm__user") ?? null;
 	if (!cartId) return { cart: null };
 
-	const cart = (await api.get(`carts/${cartId}`).json()) as CartRes;
+	// TODO if there is an abandonned cart, load it first
+
+	const cart = (await api
+		.get(`carts/${cartId}`, { credentials: "include" })
+		.json()) as CartRes;
+
 	if (!cart) return { cart: null };
 
 	return {

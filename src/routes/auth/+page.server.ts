@@ -6,6 +6,8 @@ import type { UserSession } from "$lib/types/commons";
 import { fail, type Actions, redirect } from "@sveltejs/kit";
 import { HTTPError } from "ky";
 
+//FIXME Encrypt cookies stored data
+
 export const actions = {
 	login: async ({ request, cookies }) => {
 		const form = await request.formData();
@@ -20,25 +22,28 @@ export const actions = {
 		}
 
 		try {
-			const res = await api
-				.post("auth", {
-					json: {
-						email: username,
-						password: password,
-					},
-				})
-				.json();
+			const res = await api.post("auth", {
+				json: {
+					email: username,
+					password: password,
+				},
+				credentials: "include",
+			});
 
 			if (!res) {
 				return fail(400, { message: "Identifiants incorrects" });
 			}
 
-			const customer = res as CustomerRes;
+			let cookie = res.headers.getSetCookie()[0];
+			cookie = cookie.substring(cookie.indexOf("=") + 1, cookie.indexOf(";"));
+
+			const customer = (await res.json()) as CustomerRes;
 			const customerCookie = JSON.stringify({
 				id: customer.customer.id,
 				email: customer.customer.email,
 				lastLogged: Date.now().toString(),
 				isLogged: String(true),
+				cookieId: cookie,
 			});
 
 			const userStore: UserSession = {
@@ -46,6 +51,7 @@ export const actions = {
 				email: customer.customer.email,
 				lastLogged: Date.now().toString(),
 				isLogged: String(true),
+				cookieId: cookie,
 			};
 
 			cookies.set("__tm__session", customerCookie, {
@@ -97,27 +103,31 @@ export const actions = {
 		}
 
 		try {
-			const customer = (await api
-				.post("customers", {
-					json: {
-						email: data.data.email,
-						password: data.data.password,
-						first_name: data.data.firstName,
-						last_name: data.data.lastName,
-						phone: data.data.phone,
-					},
-				})
-				.json()) as CustomerRes;
+			const res = await api.post("customers", {
+				json: {
+					email: data.data.email,
+					password: data.data.password,
+					first_name: data.data.firstName,
+					last_name: data.data.lastName,
+					phone: data.data.phone,
+				},
+				credentials: "include",
+			});
 
 			if (!customer) {
 				return fail(400, { message: "Impossible de créer cet utilisateur" });
 			}
 
+			let cookie = res.headers.getSetCookie()[0];
+			cookie = cookie.substring(cookie.indexOf("=") + 1, cookie.indexOf(";"));
+
+			const customer = (await res.json()) as CustomerRes;
 			const customerCookie = JSON.stringify({
 				id: customer.customer.id,
 				email: customer.customer.email,
 				lastLogged: Date.now().toString(),
 				isLogged: String(true),
+				cookieId: cookie,
 			});
 
 			const userStore: UserSession = {
@@ -125,6 +135,7 @@ export const actions = {
 				email: customer.customer.email,
 				lastLogged: Date.now().toString(),
 				isLogged: String(true),
+				cookieId: cookie,
 			};
 
 			cookies.set("__tm__session", customerCookie, {
