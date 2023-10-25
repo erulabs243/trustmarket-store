@@ -1,6 +1,6 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
-  import { invalidateAll } from "$app/navigation";
+  import { goto, invalidateAll } from "$app/navigation";
   import type { ActionResult } from "@sveltejs/kit";
   import {
     IconAlertTriangle,
@@ -17,6 +17,7 @@
   let registrationData: undefined | ActionResult;
 
   export let label: string;
+  export let from = "";
  
   type FormType = "login" | "registration";
   let form: FormType = "login";
@@ -78,6 +79,7 @@
                 $userStore = result.data.user;
                 invalidateAll();
                 document.querySelector("#loginForm").close();
+                if(from === "cart") goto("/cart?step=shipping");
                 //const d = document.querySelector("#loginForm");
                 //d.close();
               } else {
@@ -152,12 +154,11 @@
 
             return async ({ result, update }) => {
 
-              console.log(result);
-
               if (result.status === 200) {
                 $userStore = result.data.user;
                 invalidateAll();
                 document.querySelector("#loginForm").close();
+                if(from === "cart") goto("/cart?step=shipping");
                 loading = false;
                 await update();
                 //const d = document.querySelector("#loginForm");

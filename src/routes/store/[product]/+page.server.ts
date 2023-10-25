@@ -3,7 +3,7 @@ import type { CartRes, ProductRes, RegionsRes } from "$lib/types/apiResponse";
 import { fail } from "@sveltejs/kit";
 import { message, superValidate } from "sveltekit-superforms/server";
 import type { Actions, PageServerLoad } from "./$types";
-import type { ProductType, RegionType } from "$lib/types/apiType";
+import type { CartType, ProductType } from "$lib/types/apiType";
 import { addToCartSchema } from "$lib/schemas/storeSchema";
 
 export const load = (async ({ params }) => {
@@ -43,7 +43,7 @@ export const load = (async ({ params }) => {
 type Message = {
 	status: "error" | "success";
 	text: string;
-	cart?: string;
+	cart?: CartType;
 };
 
 export const actions = {
@@ -67,7 +67,6 @@ export const actions = {
 		}
 
 		// Create cart if not in sessionstorage
-		//let cartId = formData.has("cart") ? formData.get("cart") : "";
 		let cartId = cookies.get("__tm__cart") ?? "";
 		if (!cartId) {
 			//Get regions
@@ -120,7 +119,7 @@ export const actions = {
 		return message(form, {
 			text: "Produit ajouté au panier",
 			status: "success",
-			cart: cart.cart.id,
+			cart: cart.cart,
 		});
 	},
 } satisfies Actions;

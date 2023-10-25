@@ -5,22 +5,28 @@
   import { displayCurrency } from "$lib/utils/lang";
   import { fail } from "@sveltejs/kit";
   import { IconEdit, IconTrash } from "@tabler/icons-svelte";
-
+  import { cartStore, cartTotalStore } from "$lib/stores/cart";
+    import type { CartRes } from "$lib/types/apiResponse";
+  
   type Processing = "deleting" | "updating" | null;
 
   export let item: LineItemType;
   let processing: Processing = null;
   let qty: number = item.quantity;
 
+  //FIXME item quantity after delete update
+
   //Update line item in cart
   const updateCart = async () => {
     processing = "updating";
     const url = `carts/${item.cart_id}/line-items/${item.id}`;
-    const res = await api.post(url, { json: { quantity: Number(qty) } }).json();
+    const res = (await api.post(url, { json: { quantity: Number(qty) } }).json()) as CartRes;
 
     if (!res)
       throw fail(400, { text: "Impossible de mettre à jour votre panier." });
 
+    $cartStore = res.cart.items;
+    $cartTotalStore = Number(res.cart.total);
     invalidateAll();
     processing = null;
   };
@@ -29,10 +35,12 @@
   const deleteItem = async () => {
     processing = "deleting";
     const url = `carts/${item.cart_id}/line-items/${item.id}`;
-    const res = await api.delete(url).json();
+    const res = (await api.delete(url).json()) as CartRes;
 
     if (!res) throw fail(400, { text: "Impossible to delete the item" });
 
+    $cartStore = res.cart.items;
+    $cartTotalStore = Number(res.cart.total);
     invalidateAll();
     processing = null;
   };

@@ -5,7 +5,8 @@
   import type { PageData } from "./$types";
   import { superForm } from "sveltekit-superforms/client";
   import { addToCartSchema } from "$lib/schemas/storeSchema";
-  import { browser } from "$app/environment";
+  import { cartStore, cartTotalStore } from "$lib/stores/cart";
+    import type { CartStoreItem } from "$lib/types/commons";
 
   export let data: PageData;
   export let { product, related } = data;
@@ -16,8 +17,14 @@
     validators: addToCartSchema,
     onSubmit: ({ formData }) => {
       formData.set("variant", product.variants[variant].id);
-      formData.set("cart", localStorage.getItem("__tm__cart") ?? "");
     },
+    onResult: ({result}) => {
+      if(result.status === 200) {
+        const { message, data } = result.data.form;
+        $cartStore = message.cart.items;
+        $cartTotalStore = Number(message.cart.total);
+      }
+    }
   });
 
   const changeVariant = (id: number) => (variant = id);
@@ -108,9 +115,6 @@
       </div>
       <form method="post" use:enhance>
         {#if $message}
-          <span class="hidden"
-            >{localStorage.setItem("__tm__cart", $message.cart)}</span
-          >
           <div
             class={` my-4 alert ${
               $message.status == "error" ? "alert-error" : "alert-success"

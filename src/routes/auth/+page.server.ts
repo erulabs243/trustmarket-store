@@ -56,6 +56,16 @@ export const actions = {
 				maxAge: 60 * 60 * 24 * 7,
 			});
 
+			//Assign cart to customer
+			const cart = cookies.get("__tm__cart");
+			if (cart) {
+				await api
+					.post(`carts/${cart}`, {
+						json: { customer_id: customer.customer.id },
+					})
+					.json();
+			}
+
 			return { logged: true, user: userStore };
 		} catch (error) {
 			if (error instanceof HTTPError) {
@@ -124,6 +134,16 @@ export const actions = {
 				sameSite: "lax",
 				maxAge: 60 * 60 * 24 * 7,
 			});
+
+			//Assign cart to customer
+			const cart = cookies.get("__tm__cart");
+			if (cart) {
+				await api
+					.post(`carts/${cart}`, {
+						json: { customer_id: customer.customer.id },
+					})
+					.json();
+			}
 
 			return { logged: true, user: userStore };
 		} catch (error) {

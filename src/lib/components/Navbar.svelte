@@ -1,12 +1,20 @@
 <script lang="ts">
-    import type { UserSession } from "$lib/types/commons";
-  import { IconSearch, IconShoppingBag } from "@tabler/icons-svelte";
+    import type { CartStoreItem, UserSession } from "$lib/types/commons";
+  import { IconSearch, IconShoppingBag, IconShoppingBagCheck, IconShoppingBagX } from "@tabler/icons-svelte";
     import Login from "./Login.svelte";
     import { enhance } from "$app/forms";
   import userStore from "$lib/stores/user";
     import { goto, invalidateAll } from "$app/navigation";
+    import { cartStore, cartTotalStore } from "$lib/stores/cart";
+    import type { LineItemType } from "$lib/types/apiType";
+    import { displayCurrency } from "$lib/utils/lang";
 
-  let user: UserSession | null;
+  let user: UserSession | null = $userStore;
+  let cart: Array<LineItemType>;
+  let cartTotal: number;
+
+  cartStore.subscribe((value) => cart = value);
+  cartTotalStore.subscribe((value) => cartTotal = value);
 
   userStore.subscribe(value => user = value);
 
@@ -35,9 +43,51 @@
         Rechercher
       </button>
     </div>
-    <a href="/cart" class="btn btn-ghost btn-circle">
-      <IconShoppingBag />
-    </a>
+    <div class="dropdown dropdown-end">
+      <button tabindex="0" class="btn btn-outline btn-neutral rounded-3xl w-32">
+        <IconShoppingBag />
+        <div class="badge badge-secondary">{cart.length}</div>
+      </button>
+      <div tabindex="0" class="mt-4 z-[1] card card-compact dropdown-content px-2 w-72 bg-base-100 shadow">
+        <div class="card-body">
+          {#if cart.length === 0}
+            <div class="alert alert-warning flex flex-col justify-center gap-1">
+              <IconShoppingBagX />
+              <span class="text-lg">Panier vide</span>
+            </div>
+          {:else}
+            {@const items = cart.slice(0, 3)}
+            {#each items as item}
+            	<article class="flex gap-2 items-center">
+                <figure class="w-12 h-12">
+                  <img src={item.thumbnail} alt={item.title} class="object-cover rounded-xl" />
+                </figure>
+                <div>
+                    <p class="w-full">{item.title}<span class="badge ml-2 badge-secondary badge-sm">{item.variant?.title}</span></p>
+                    <p class="font-bold mt-1">{displayCurrency(item.total)}</p>
+                </div>
+            	</article>
+            {/each}
+          {/if}
+          <div>
+            {#if cart.length > 3}
+              {@const remain = cart.length - 3}
+            	<a href="/cart" class="btn btn-sm btn-ghost btn-block rounded-3xl">{`+ ${remain} produit${remain > 1 ? "s" : ""} `}</a>
+            {/if}
+            <div class="flex items-center justify-between w-full mt-2">
+              <p>Total</p>
+              <p class="text-right font-bold w-full text-lg">{displayCurrency(cartTotal)}</p>
+            </div>
+          </div>
+        </div>
+        <footer class="card-actions mb-4 mt-2 px-4">
+          <a href="/cart" class="btn btn-primary btn-sm btn-block py-1 rounded-3xl">
+            Mon panier
+          </a>
+        </footer>
+      </div>
+    </div>
+    
     {#if user}
     <div class="dropdown dropdown-end">
       <label tabindex="0" class="btn btn-ghost btn-circle avatar">

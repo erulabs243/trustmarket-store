@@ -84,7 +84,7 @@
             >Continuer les achats</a
           >
           {#if !user}
-            <Login label="Commander maintenant" />
+            <Login label="Commander maintenant" from="cart" />
           {:else}
             <button class="btn btn-primary rounded-3xl">
               Commander maintenant
