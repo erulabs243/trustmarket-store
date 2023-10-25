@@ -2,6 +2,7 @@ import { invalidateAll } from "$app/navigation";
 import { registrationSchema } from "$lib/schemas/authSchema";
 import api from "$lib/server/apiClient";
 import type { CustomerRes } from "$lib/types/apiResponse";
+import type { UserSession } from "$lib/types/commons";
 import { fail, type Actions, redirect } from "@sveltejs/kit";
 import { HTTPError } from "ky";
 
@@ -40,6 +41,13 @@ export const actions = {
 				isLogged: String(true),
 			});
 
+			const userStore: UserSession = {
+				id: customer.customer.id,
+				email: customer.customer.email,
+				lastLogged: Date.now().toString(),
+				isLogged: String(true),
+			};
+
 			cookies.set("__tm__session", customerCookie, {
 				path: "/",
 				httpOnly: true,
@@ -48,7 +56,7 @@ export const actions = {
 				maxAge: 60 * 60 * 24 * 7,
 			});
 
-			return { logged: true };
+			return { logged: true, user: userStore };
 		} catch (error) {
 			if (error instanceof HTTPError) {
 				if ([400, 401, 404, 409, 422].includes(error.response.status)) {
@@ -102,6 +110,13 @@ export const actions = {
 				isLogged: String(true),
 			});
 
+			const userStore: UserSession = {
+				id: customer.customer.id,
+				email: customer.customer.email,
+				lastLogged: Date.now().toString(),
+				isLogged: String(true),
+			};
+
 			cookies.set("__tm__session", customerCookie, {
 				path: "/",
 				httpOnly: true,
@@ -110,7 +125,7 @@ export const actions = {
 				maxAge: 60 * 60 * 24 * 7,
 			});
 
-			return { logged: true };
+			return { logged: true, user: userStore };
 		} catch (error) {
 			if (error instanceof HTTPError) {
 				if (error.response.status === 422) {
@@ -133,9 +148,8 @@ export const actions = {
 			const res = await api.delete("auth").json();
 			cookies.delete("__tm__session");
 			cookies.delete("__tm__cart");
-			invalidateAll();
 
-			throw redirect(303, "/");
+			return { logged: false, user: null };
 		} catch (error) {
 			if (error instanceof HTTPError) {
 				return fail(400, { message: "Impossible de vous déconnecter" });

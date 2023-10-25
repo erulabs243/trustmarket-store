@@ -11,11 +11,13 @@
     IconUser,
     IconX,
   } from "@tabler/icons-svelte";
+  import userStore from "$lib/stores/user";
 
   let actionData: undefined | ActionResult;
   let registrationData: undefined | ActionResult;
 
   export let label: string;
+ 
   type FormType = "login" | "registration";
   let form: FormType = "login";
 
@@ -73,7 +75,9 @@
 
             return async ({ result, update }) => {
               if (result.status === 200) {
+                $userStore = result.data.user;
                 invalidateAll();
+                document.querySelector("#loginForm").close();
                 //const d = document.querySelector("#loginForm");
                 //d.close();
               } else {
@@ -151,6 +155,7 @@
               console.log(result);
 
               if (result.status === 200) {
+                $userStore = result.data.user;
                 invalidateAll();
                 document.querySelector("#loginForm").close();
                 loading = false;

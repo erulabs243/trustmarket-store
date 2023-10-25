@@ -3,9 +3,12 @@
   import { IconSearch, IconShoppingBag } from "@tabler/icons-svelte";
     import Login from "./Login.svelte";
     import { enhance } from "$app/forms";
-    import { goto } from "$app/navigation";
+  import userStore from "$lib/stores/user";
+    import { goto, invalidateAll } from "$app/navigation";
 
-  export let user: UserSession | null;
+  let user: UserSession | null;
+
+  userStore.subscribe(value => user = value);
 
 </script>
 
@@ -54,7 +57,13 @@
         </li>
         <li><a>Settings</a></li>
         
-          <form method="post" action="/auth?/logout" use:enhance>
+          <form method="post" action="/auth?/logout" use:enhance={() => {
+              return async () => {
+              $userStore = null;
+              invalidateAll();
+              goto("/");
+            }
+            }}>
             <button type="submit" class=" mt-4 btn btn-sm btn-error btn-outline rounded-3xl w-full">Déconnexion</button>
           </form>
         

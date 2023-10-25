@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { page } from "$app/stores";
   import Navbar from "$lib/components/Navbar.svelte";
   import type {UserSession} from "$lib/types/commons";
   import "../app.css";
@@ -11,5 +12,5 @@
   //TODO load cart data in header
 </script>
 
-<Navbar {user} />
+<Navbar />
 <slot />
