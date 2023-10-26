@@ -47,26 +47,27 @@
   };
 </script>
 
-<div class="flex gap-8 rounded-none bg-base-200 p-4">
-  <figure>
+<div class="flex flex-col lg:flex-row border-b border-gray-700 gap-8 rounded-none bg-base-200 p-4">
+  <figure class="w-full">
     <img
       src={item.thumbnail}
       alt={item.title}
-      class="max-w-32 max-h-32 object-cover rounded-xl"
+      class="max-w-32 mx-auto max-h-32 object-cover rounded-xl"
     />
   </figure>
 
-  <div class="flex items-center gap-4 w-full">
-    <div class="w-2/6">
-      <h3>{item.title}</h3>
-      <p>{`${item.quantity} x ${displayCurrency(item.unit_price)}`}</p>
+  <div class="flex flex-col lg:flex-row items-center gap-4 w-full">
+    <div class="w-full lg:w-2/6">
+      <h3 class="text-center lg:text-left text-xl font-bold text-gray-700">{item.title}</h3>
+      <p class="text-center text-gray-700">{`${item.quantity} x ${displayCurrency(item.unit_price)}`}</p>
     </div>
-    <div class="w-1/6">
+    <div class="w-full lg:w-1/6 flex justify-center items-center">
+      <span class="mr-4 text-lg text-gray-700 lg:hidden">Modèle</span>
       <button class="btn btn-outline btn-neutral rounded-xl">
         {item.variant?.title}
       </button>
     </div>
-    <div class="w-1/6">
+    <div class="w-full lg:w-1/6">
       <form>
         <div class="flex gap-2 w-full justify-center">
           <div class="form-control w-3/4">
@@ -78,7 +79,7 @@
             />
           </div>
           <button
-            class="btn btn-circle btn-primary btn-square rounded-xl"
+            class="btn btn-circle btn-secondary btn-square rounded-xl"
             on:click={updateCart}
           >
             {#if processing === "updating"}
@@ -102,8 +103,9 @@
         {/if}
       </button>
     </div>
-    <div class="w-1/6">
-      <p>{displayCurrency(item.subtotal)}</p>
+    <div class="flex items-center justify-center gap-2 w-1/6">
+      <p class="text-gray-700 lg:hidden">Prix</p>
+      <p class="font-bold text-gray-700 text-lg">{displayCurrency(item.subtotal)}</p>
     </div>
   </div>
 </div>

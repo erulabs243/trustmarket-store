@@ -43,7 +43,7 @@ export const actions = {
 			}
 
 			// FIXME Delete cart from cookies
-			cookies.delete("__tm__cart");
+			cookies.delete("__tm__cart", { path: "/" });
 			return { success: true };
 		} catch (error) {
 			if (error instanceof HTTPError) {

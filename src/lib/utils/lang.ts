@@ -1,4 +1,5 @@
-export const setCurrency = (amount: number): number => amount / 100;
+export const setCurrency = (amount: number): number =>
+	!amount ? 0 : amount / 100;
 
 export const displayCurrency = (amount: number): string =>
 	setCurrency(amount).toLocaleString("fr-FR", {

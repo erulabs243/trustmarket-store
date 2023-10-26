@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { CartStoreItem, UserSession } from "$lib/types/commons";
-  import { IconSearch, IconShoppingBag, IconShoppingBagCheck, IconShoppingBagX } from "@tabler/icons-svelte";
+  import { IconMenu2, IconSearch, IconShoppingBag, IconShoppingBagCheck, IconShoppingBagX } from "@tabler/icons-svelte";
     import Login from "./Login.svelte";
     import { enhance } from "$app/forms";
   import userStore from "$lib/stores/user";
@@ -22,6 +22,17 @@
 
 <div class="navbar bg-base-100">
   <div class="flex-1">
+    <div class="dropdown sm:hidden">
+      <button tabindex="0" class="btn btn-ghost btn-circle btn-neutral">
+        <IconMenu2 />
+      </button>
+
+        <div class="mt-4 z-[1] dropdown-content menu shadow bg-base-100 rounded-box w-48" tabindex="0">
+          <li><a href="/">Accueil</a></li>
+          <li><a href="/store/categories">Nos catégories</a></li>
+          <li><a href="/store/collections">Nos collections</a></li>
+        </div>
+    </div>
     <a class="btn btn-ghost normal-case text-xl" href="/">TrustMarket</a>
   </div>
   <div class="navbar-center hidden lg:flex">
@@ -31,8 +42,8 @@
       <li><a href="/store/collections">Nos collections</a></li>
     </ul>
   </div>
-  <div class="navbar-end justify-end gap-4">
-    <div class="form-control w-full flex flex-row items-center gap-2">
+  <div class="navbar-end justify-end gap-4 ">
+    <div class="form-control w-full flex flex-row items-center gap-2 hidden lg:flex">
       <IconSearch size={24} stroke={1} />
       <input
         type="search"
@@ -44,7 +55,7 @@
       </button>
     </div>
     <div class="dropdown dropdown-end">
-      <button tabindex="0" class="btn btn-outline btn-neutral rounded-3xl w-32">
+      <button tabindex="0" class="btn btn-outline btn-neutral rounded-3xl w-24 lg:w-32">
         <IconShoppingBag />
         <div class="badge badge-secondary">{cart.length}</div>
       </button>

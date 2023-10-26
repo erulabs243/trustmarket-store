@@ -32,44 +32,48 @@
 </script>
 
 <!-- PRODUCT -->
-<section>
-  <h1>
+<section class="my-8 lg:my-12 px-4">
+  <h1 class="text-center uppercase font-bold text-neutral lg:hidden mb-4 text-lg">
     {product.title}
   </h1>
-  <div class="flex gap-12">
-    <aside class="flex gap-4 flex-1">
-      <div class="flex flex-col gap-2">
+  <div class="flex flex-col lg:flex-row gap-12">
+    <aside class="flex flex-col-reverse lg:flex-row gap-4 flex-1">
+      <div class="flex flex-row justify-center lg:justify-start lg:flex-col gap-2">
         {#each product.images as img, id}
           <button
             on:click={() => changeImage(id)}
             on:keydown={() => changeImage(id)}
           >
+            <figure class={`bg-base-100 p-0 rounded-xl ${image === id ? "border-2 border-gray-700" : ""}`}>
             <img
               src={img.url}
               alt={product.title}
-              class="rounded-xl h-28 hover:cursor-pointer"
+              class="rounded-xl h-20 w-20 lg:h-24 lg:w-24 object-cover hover:cursor-pointer"
             />
+</figure>
           </button>
         {/each}
       </div>
+      <figure class="bg-base-300 p-0 rounded-xl w-full">
       <img
         src={product.images[image].url}
         alt={product.title}
-        class="rounded-xl h-96 object-cover"
+        class="rounded-xl h-48 w-full lg:h-96 object-cover mx-auto"
       />
+      </figure>
     </aside>
-    <aside class="flex flex-col gap-4 flex-1">
-      <h2>{product.title}</h2>
+    <aside class="flex flex-col gap-2 lg:gap-4 flex-1">
+      <h2 class="text-xl text-neutral">{product.title}</h2>
       <div class="flex items-center">
         <p>
-          <span
+          <span class="font-bold text-2xl text-neutral"
             >{displayCurrency(product.variants[variant].prices[0].amount)}</span
           >
           <!-- TODO setting product discount -->
         </p>
       </div>
       {#if product.description}
-        <p>{product.description}</p>
+        <p class="text-gray-500 leading-tight lg:leading-normal mb-2">{product.description}</p>
       {/if}
 
       {#if product.categories && product.categories.length > 0}
@@ -88,23 +92,23 @@
       {/if}
 
       {#if product.collection_id}
-        <p>
-          <span>Collection</span>
+        <div class="flex gap-2 items-center">
+          <p class="text-gray-700">Collection</p>
           <a
             href={`/store/collections/${product.collection.handle}`}
-            class="btn btn-outline btn-sm btn-secondary rounded-xl"
+            class="btn btn-outline btn-sm btn-neutral rounded-3xl"
             >{product.collection.title}</a
           >
-        </p>
+        </div>
       {/if}
 
-      <div>
-        <p>Modèles</p>
+      <div class="flex flex-col lg:flex-row gap-1">
+        <p class="text-gray-700">Modèles</p>
         <nav class="join flex-wrap gap-2">
           {#each product.variants as model, id}
             <button
               class={`btn ${
-                variant !== id ? "btn-outline btn-neutral" : "btn-primary"
+                variant !== id ? "btn-outline btn-neutral" : "btn-accent ring ring-offset-1 ring-orange-400"
               } rounded-xl`}
               on:click={() => changeVariant(id)}
             >
@@ -113,7 +117,7 @@
           {/each}
         </nav>
       </div>
-      <form method="post" use:enhance>
+      <form method="post" class="my-4" use:enhance>
         {#if $message}
           <div
             class={` my-4 alert ${
@@ -124,15 +128,15 @@
             <span>{$message.text}</span>
           </div>
         {/if}
-        <div class="flex items-end gap-4">
-          <div class="form-control w-1/3">
             {#if $errors.quantity}
               <label class="label" for="quantity">
-                <span class="label-text-alt text-red-500">
+                <span class="label-text-alt text-base text-red-500">
                   {$errors.quantity}
                 </span>
               </label>
             {/if}
+        <div class="flex items-end gap-4">
+          <div class="form-control w-1/3">
             <input
               type="number"
               class={`input input-bordered rounded-3xl ${
@@ -163,11 +167,11 @@
 <!-- END PRODUCT -->
 
 <!-- RELATED BY COLLECTION -->
-<div class="flex flex-col gap-12 my-24">
+<div class="flex flex-col gap-8 lg:gap-12 my-8 lg:my-24 px-4">
   <header>
-    <h4>Ils pourraient vous intéresser...</h4>
+    <h4 class="text-xl lg:text-2xl font-bold">Ils pourraient vous intéresser...</h4>
   </header>
-  <section class="grid grid-cols-6 gap-4">
+  <section class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
     {#each related as product}
       <ProductCard {product} />
     {/each}
