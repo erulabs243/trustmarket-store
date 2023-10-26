@@ -1,18 +1,51 @@
 <script lang="ts">
-  import CartItem from "$lib/components/CartItem.svelte";
     import { displayCurrency } from "$lib/utils/lang";
     import { superForm } from "sveltekit-superforms/client";
 import type { PageData } from "./$types";
     import { IconBuildingBank, IconMapPin, IconPhone, IconPlus, IconTarget, IconUser } from "@tabler/icons-svelte";
     import { addressSchema } from "$lib/schemas/storeSchema";
+    import type { ShippingMethodType, } from "$lib/types/apiType";
+    import { goto, invalidateAll } from "$app/navigation";
+    import api from "$lib/apiClient";
+    import type { CartRes } from "$lib/types/apiResponse";
+    import { HTTPError } from "ky";
   
   export let data: PageData;
+  let loading: boolean = false;
 
-  let {cart, addresses} = data;
+  let {cart, addresses, options} = data;
 
-  const {form, enhance, errors, message} = superForm(data.form, {
-    validators: addressSchema
+  const {form, enhance, errors, message, delayed} = superForm(data.form, {
+    validators: addressSchema,
+    onResult: ({ result }) => {
+    console.log(result);
+  
+      if(result.status === 200) {
+        document.querySelector("#addressForm").close();
+        invalidateAll();
+      }
+    }
   });
+
+  //Handle shipping option
+  const handleShipping = async (option: string) => {
+    try {
+      loading = true;
+      const res = (await api.post(`carts/${cart.cart.id}/shipping-methods`, {
+      json: { option_id: option },
+      credentials: "include"
+    }).json()) as CartRes;
+
+    loading = false;
+    goto("/cart/payment");
+    } catch (error) {
+    if(error instanceof HTTPError){
+    console.log(error.response);
+  } 
+    console.log(error);
+    loading = false;
+  }
+  }
   
 </script>
 
@@ -38,6 +71,11 @@ import type { PageData } from "./$types";
     <form method="post" action="/cart/shipping?/add" use:enhance>
       <h3>Nouvelle adresse de livraison</h3>
       <div class="flex flex-col gap-4">
+            {#if $message }
+              <div class={`alert my-4 ${$message.status === "error" ? "alert-error" : "alert-success"}`}>
+                {$message.text}
+              </div>            	
+            {/if}
           <div class="flex gap-4 items-center w-full">
             <div class="form-control w-1/2">
               <div
@@ -126,7 +164,7 @@ import type { PageData } from "./$types";
                 <IconMapPin />
                 <input
                   type="text"
-                  name="Ville"
+                  name="city"
                   class="input w-full focus:outline-none px-0"
                   placeholder="Ville"
                   bind:value={$form.city}
@@ -188,7 +226,7 @@ import type { PageData } from "./$types";
               </div>
               {#if $errors.phone}
               	<p class="label">
-                  <span class="label-text-alt text-red-500">{$errors.phone}</span>
+                  <span class="label-text-alt text-red-500">Numéro de téléphone invalide</span>
                 </p>
               {/if}
             </div>
@@ -212,7 +250,10 @@ import type { PageData } from "./$types";
               {/if}
             </div>
           </div>
-          <button class="btn btn-secondary rounded-3xl mx-auto my-4">
+          <button type="submit" class={`btn btn-secondary rounded-3xl mx-auto my-4 ${$delayed ? "btn-disabled" : ""}`}>
+            {#if $delayed}
+            	<span class="loading loading-spinner" />
+            {/if}
             Enregistrer l'adresse
           </button>
       </div>
@@ -221,6 +262,27 @@ import type { PageData } from "./$types";
     <form method="dialog" class="modal-backdrop">
       <button>close</button>
     </form>
+    </dialog>
+
+    <!-- SHIPPING METHODS -->
+
+    <!-- TODO Show errors when occuring -->
+    {#if loading}
+    	<div class="alert alert-warning">
+        <p>Traitement en cours</p>
+      </div>
+    {/if}
+    {#if options && options.shipping_options.length > 0}
+    	<div>
+        {#each options.shipping_options as option}
+        	<button class="btn btn-outline rounded-xl btn-block" on:click={() => handleShipping(option.id)}>
+            {option.name}
+          </button>
+        {/each}
+      </div>
+    {/if}
+    <!-- END SHIPPING METHODS -->
+    
   </section>
   <!-- END SHIPPING SECTION -->
   

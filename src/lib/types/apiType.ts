@@ -1,6 +1,6 @@
 export type Nullable<T> = T | null | undefined;
 
-export type MetadataType = {};
+export type MetadataType = unknown;
 
 export type CollectionMetadataType = {
 	description?: string;
@@ -225,7 +225,7 @@ export type ShippingOptionType = {
 	amount: Nullable<number>;
 	is_return: boolean;
 	admin_only: boolean;
-	data: {};
+	data: unknown;
 	price_incl_tax: Nullable<number>;
 	tax_amount: Nullable<number>;
 	includes_tax: boolean;
@@ -244,21 +244,21 @@ export type ShippingMethodType = {
 	swap_id: Nullable<string>;
 	return_id: Nullable<string>;
 	price: number;
-	data: {};
+	data: unknown;
 	tax_total: number;
 	total: number;
 	subtotal: number;
 	includes_tax: boolean;
 	tax_lines: ShippingTaxLineType[];
 	shipping_option: Nullable<ShippingOptionType>;
-	return_order: Nullable<{}>;
-	swap: Nullable<{}>;
-	cart: Nullable<{}>;
-	claim_order: Nullable<{}>;
-	order: Nullable<{}>;
+	return_order: Nullable<OrderType>;
+	swap: Nullable<SwapType>;
+	cart: Nullable<CartType>;
+	claim_order: Nullable<OrderType>;
+	order: Nullable<OrderType>;
 };
 
-export type PaymentType = {};
+export type PaymentType = unknown;
 
 export type PaymentSessionType = {
 	id: string;
@@ -287,7 +287,7 @@ export type GiftCardType = {
 	is_disabled: boolean;
 	ends_at: Nullable<string>;
 	tax_rate: Nullable<number>;
-	order: Nullable<{}>;
+	order: Nullable<OrderType>;
 	region: Nullable<RegionType>;
 };
 export type DiscountRuleType = {
@@ -296,7 +296,7 @@ export type DiscountRuleType = {
 	description: Nullable<string>;
 	value: number;
 	allocation: Nullable<"total" | "item">;
-	conditions: Array<{}>;
+	conditions: Array<unknown>;
 } & TimestampType;
 
 export type DiscountType = {
@@ -312,7 +312,7 @@ export type DiscountType = {
 	usage_limit: Nullable<number>;
 	usage_count: number;
 	regions: RegionType[];
-	parent_discount: Nullable<{}>;
+	parent_discount: Nullable<unknown>;
 	rule: Nullable<DiscountRuleType>;
 } & TimestampType;
 
@@ -424,12 +424,12 @@ export type LineItemType = {
 	subtotal: number;
 	refundable: number;
 	variant: Nullable<VariantType>;
-	order_edit: Nullable<{}>;
+	order_edit: Nullable<OrderType>;
 	adjustments: AdjustmentType[];
 	tax_lines: TaxLineType[];
-	claim_order: Nullable<{}>;
-	swap: Nullable<{}>;
-	order: Nullable<{}>;
+	claim_order: Nullable<OrderType>;
+	swap: Nullable<SwapType>;
+	order: Nullable<OrderType>;
 	cart: Nullable<CartType>;
 } & TimestampType;
 
@@ -521,4 +521,116 @@ export type TimestampType = {
 export type ExpandedCollection = {
 	collection: CollectionType;
 	products: Array<ProductType>;
+};
+
+export type OrderStatus =
+	| "pending"
+	| "completed"
+	| "archived"
+	| "canceled"
+	| "requires_action";
+
+export type FulfillmentStatus =
+	| "not_fulfilled"
+	| "partially_fulfilled"
+	| "fulfilled"
+	| "partially_shipped"
+	| "shipped"
+	| "partially_returned"
+	| "returned"
+	| "canceled"
+	| "requires_action";
+
+export type PaymentStatus =
+	| "not_paid"
+	| "awaiting"
+	| "captured"
+	| "partially_refunded"
+	| "refunded"
+	| "canceled"
+	| "requires_action";
+
+export type OrderType = {
+	id: string;
+	status: OrderStatus;
+	fulfillment_status: FulfillmentStatus;
+	payment_status: PaymentStatus;
+	display_id: number;
+	cart_id: Nullable<string>;
+	customer_id: string;
+	email: string;
+	billing_address_id: Nullable<string>;
+	shipping_address_id: Nullable<string>;
+	region_id: string;
+	currency_code: string;
+	tax_rate: Nullable<number>;
+	draft_order_id: Nullable<string>;
+	canceled_at: Nullable<string>;
+	no_notification: Nullable<boolean>;
+	idempotency_key: Nullable<string>;
+	external_id: Nullable<string>;
+	created_at: string;
+	updated_at: string;
+	metadata: Nullable<MetadataType>;
+	cart: Nullable<CartType>;
+	billing_address: Nullable<BillingAddressType>;
+	shipping_address: Nullable<ShippingAddressType>;
+	region: Nullable<RegionType>;
+	currency: Nullable<CurrencyType>;
+	discounts: Array<DiscountType>;
+	gift_cards: Array<GiftCardType>;
+	shipping_methods: Array<ShippingMethodType>;
+	payments: Array<PaymentType>;
+	fulfillments: Array<unknown>;
+	returns: Array<unknown>;
+	claims: Array<unknown>;
+	refunds: Array<unknown>;
+	swaps: Array<SwapType>;
+	draft_order: Nullable<unknown>;
+	items: Array<LineItemType>;
+	edits: Array<unknown>;
+	gift_card_transactions: Array<GiftCardType>;
+	sales_channel_id: Nullable<string>;
+	sales_channel: Nullable<SalesChannelType>;
+	shipping_total: Nullable<number>;
+	shipping_tax_total: number;
+	raw_discount_total: number;
+	discount_total: number;
+	tax_total: number;
+	items_tax_total: Nullable<number>;
+	refunded_total: number;
+	total: number;
+	subtotal: number;
+	paid_total: number;
+	refundable_amount: number;
+	gift_card_total: number;
+	gift_card_tax_total: number;
+	returnable_items: Array<LineItemType>;
+};
+
+export type SwapType = {
+	id: string;
+	fulfillment_status: FulfillmentStatus;
+	payment_status: PaymentStatus;
+	order_id: string;
+	difference_due: Nullable<number>;
+	shipping_address_id: Nullable<string>;
+	cart_id: Nullable<string>;
+	confirmed_at: Nullable<string>;
+	canceled_at: Nullable<string>;
+	no_notification: Nullable<boolean>;
+	allow_backorder: boolean;
+	idempotency_key: Nullable<string>;
+	created_at: string;
+	updated_at: string;
+	deleted_at: Nullable<string>;
+	metadata: Nullable<MetadataType>;
+	order: Nullable<OrderType>;
+	additional_items: Array<LineItemType>;
+	return_order: Nullable<OrderType>;
+	fulfillments: Nullable<unknown>;
+	payment: Nullable<PaymentType>;
+	shipping_address: Nullable<ShippingAddressType>;
+	shipping_methods: Array<ShippingMethodType>;
+	cart: Nullable<CartType>;
 };

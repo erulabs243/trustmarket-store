@@ -3,9 +3,11 @@ import type {
 	CategoryType,
 	CollectionType,
 	CustomerType,
+	OrderType,
 	ProductType,
 	RegionType,
 	ShippingOptionType,
+	SwapType,
 	VariantType,
 } from "./apiType";
 
@@ -61,4 +63,9 @@ export interface RegionsRes {
 	count: number;
 	offset: number;
 	limit: number;
+}
+
+export interface CompleteCartRes {
+	type: "order" | "cart" | "swap";
+	data: OrderType | CartType | SwapType;
 }
