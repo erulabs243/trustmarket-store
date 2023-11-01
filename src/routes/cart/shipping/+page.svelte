@@ -9,6 +9,7 @@ import type { PageData } from "./$types";
     import api from "$lib/apiClient";
     import type { CartRes } from "$lib/types/apiResponse";
     import { HTTPError } from "ky";
+  import { navigating } from "$app/stores";
   
   export let data: PageData;
   let loading: boolean = false;
@@ -48,6 +49,12 @@ import type { PageData } from "./$types";
   }
   
 </script>
+
+{#if $navigating}
+	<div class="alert alert-success">
+    Chargement...
+  </div>
+{:else}
 
     <h1 class="text-center font-bold uppercase text-neutral lg:hidden my-8">Adresse de livraison</h1>
 <main class="flex flex-col-reverse lg:flex-row gap-4 lg:gap-12 my-8 lg:my-12">
@@ -322,3 +329,5 @@ import type { PageData } from "./$types";
   </section>
   <!-- END CART SECTION -->
 </main>
+
+{/if}

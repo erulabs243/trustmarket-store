@@ -3,12 +3,19 @@
   import ProductCard from "$lib/components/ProductCard.svelte";
   import { IconArrowRight } from "@tabler/icons-svelte";
   import type { PageData } from "./$types";
+  import { navigating } from "$app/stores";
 
   export let data: PageData;
   export let products = data.products;
   export let collections = data.collections;
   export let latest = data.collections.collections[0];
 </script>
+
+{#if $navigating}
+  <div class="alert alert-success">
+    Chargement...
+  </div>
+{:else}
 
 <!-- LATEST COLLECTION -->
 <div class="flex flex-col gap-4 my-4 lg:my-24 mx-4 lg:mx-0 bg-orange-300 rounded-3xl p-8 lg:p-24 shadow-lg">
@@ -78,3 +85,5 @@
   </section>
 </div>
 <!-- END BEST SOLD PRODUCTS -->
+
+{/if}

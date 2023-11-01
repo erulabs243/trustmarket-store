@@ -2,10 +2,17 @@
   import { IconArrowRight } from "@tabler/icons-svelte";
   import type { PageData } from "./$types";
   import ProductCard from "$lib/components/ProductCard.svelte";
+  import { navigating } from "$app/stores";
 
   export let data: PageData;
   export let collections = data.collections;
 </script>
+
+{#if $navigating}
+	<div class="alert alert-success">
+    Chargement...
+  </div>
+{:else}
 
 <div class="flex flex-col gap-24 my-8 lg:my-24">
   {#each collections as collection}
@@ -28,3 +35,5 @@
     </section>
   {/each}
 </div>
+
+{/if}

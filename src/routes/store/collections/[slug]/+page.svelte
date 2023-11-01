@@ -1,10 +1,17 @@
 <script lang="ts">
   import ProductCard from "$lib/components/ProductCard.svelte";
   import type { PageData } from "./$types";
+  import { navigating } from "$app/stores";
 
   export let data: PageData;
   export let { empty, collection, products } = data;
 </script>
+
+{#if $navigating}
+	<div class="alert alert-success">
+    Chargement...
+  </div>
+{:else}
 
 <div class="flex flex-col gap-12 lg:gap-24 my-8 lg:my-24">
   <header>
@@ -19,3 +26,5 @@
     {/each}
   </section>
 </div>
+
+{/if}

@@ -5,6 +5,7 @@
     import { enhance } from "$app/forms";
     import { cartStore, cartTotalStore } from "$lib/stores/cart";
     import { goto } from "$app/navigation";
+  import { navigating } from "$app/stores";
 
   export let data: PageData;
   let provider: string;
@@ -37,6 +38,11 @@
 
 </script>
 
+{#if $navigating}
+	<div class="alert alert-success">
+      Chargement...
+  </div>
+{:else}
 
 <main class="flex flex-col lg:flex-row gap-8 lg:gap-12 my-8 lg:my-12">
   <h1 class="text-center font-bold lg:hidden uppercase text-gray-700 text-xl">Paiement</h1>
@@ -167,3 +173,5 @@
   </section>
   <!-- END CART SECTION -->
 </main>
+
+{/if}

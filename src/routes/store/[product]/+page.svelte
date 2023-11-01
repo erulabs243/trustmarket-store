@@ -6,7 +6,7 @@
   import { superForm } from "sveltekit-superforms/client";
   import { addToCartSchema } from "$lib/schemas/storeSchema";
   import { cartStore, cartTotalStore } from "$lib/stores/cart";
-    import type { CartStoreItem } from "$lib/types/commons";
+  import { navigating } from "$app/stores";
 
   export let data: PageData;
   export let { product, related } = data;
@@ -31,6 +31,12 @@
   const changeImage = (id: number) => (image = id);
 </script>
 
+
+{#if $navigating}
+	<div class="alert alert-success">
+    Chargement...
+  </div>
+{:else}
 <!-- PRODUCT -->
 <section class="my-8 lg:my-12 px-4">
   <h1 class="text-center uppercase font-bold text-neutral lg:hidden mb-4 text-lg">
@@ -178,3 +184,5 @@
   </section>
 </div>
 <!-- END RELATED BY COLLECTION -->
+
+{/if}

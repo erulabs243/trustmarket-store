@@ -3,6 +3,7 @@
   import { displayCurrency } from "$lib/utils/lang";
   import { IconAlertTriangle, IconArrowRight, IconShoppingBag } from "@tabler/icons-svelte";
   import type { PageData } from "./$types";
+  import { navigating } from "$app/stores";
   import userStore from "$lib/stores/user";
   import Login from "$lib/components/Login.svelte";
 
@@ -11,6 +12,12 @@
   $: cart = data.cart;
   $: user = data.user;
 </script>
+
+{#if $navigating}
+	<div class="alert alert-success">
+    Chargement...
+  </div>
+{:else}
 
 <div class="my-8 lg:my-20 px-4">
   <h1 class="text-center uppercase text-neutral font-bold lg:hidden text-xl mb-4">Mon panier</h1>
@@ -99,3 +106,5 @@
     </div>
   {/if}
 </div>
+
+{/if}
