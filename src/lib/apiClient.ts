@@ -1,10 +1,8 @@
 import ky from "ky";
-import { PUBLIC_HOST, PUBLIC_PORT } from "$env/static/public";
+import { PUBLIC_HOST } from "$env/static/public";
 
 const api = ky.create({
-	prefixUrl:
-		`${PUBLIC_HOST}:${PUBLIC_PORT}/store/` ??
-		"http://192.168.1.124:9000/store/",
+	prefixUrl: `${PUBLIC_HOST}/store/` ?? "http://192.168.1.124:9000/store/",
 });
 
 api.extend({
