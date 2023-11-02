@@ -31,6 +31,7 @@
   const changeImage = (id: number) => (image = id);
 </script>
 
+<main class="w-screen lg:w-5/6 mx-auto">
 
 {#if $navigating}
 	<div class="alert alert-success">
@@ -108,7 +109,7 @@
         </div>
       {/if}
 
-      <div class="flex flex-col lg:flex-row gap-1">
+      <div class="flex flex-col lg:flex-row gap-2 lg:gap-4">
         <p class="text-gray-700">Modèles</p>
         <nav class="join flex-wrap gap-2">
           {#each product.variants as model, id}
@@ -186,3 +187,5 @@
 <!-- END RELATED BY COLLECTION -->
 
 {/if}
+
+</main>

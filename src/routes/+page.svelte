@@ -11,6 +11,7 @@
   export let latest = data.collections.collections[0];
 </script>
 
+
 {#if $navigating}
   <div class="alert alert-success">
     Chargement...
@@ -18,7 +19,7 @@
 {:else}
 
 <!-- LATEST COLLECTION -->
-<div class="flex flex-col gap-4 my-4 lg:my-24 mx-4 lg:mx-0 bg-orange-300 rounded-3xl p-8 lg:p-24 shadow-lg">
+<div class="flex flex-col gap-4 my-4 lg:my-12 w-11/12 lg:w-5/6 mx-auto bg-orange-300 rounded-3xl p-8 lg:p-24 shadow-lg">
   <h2 class="text-2xl lg:text-4xl font-bold text-gray-700">{latest.title}</h2>
   {#if latest.metadata?.description}
     <p class="text-gray-700">{latest.metadata.description}</p>
@@ -34,7 +35,7 @@
 <!-- END LATEST COLLECTION -->
 
 <!-- RECENT PRODUCTS -->
-<div class="flex flex-col gap-20 my-20">
+<div class="flex flex-col gap-20 my-20 w-screen lg:w-5/6 mx-auto">
   <header>
     <h2 class="text-center text-xl lg:text-2xl text-primary font-bold uppercase">Produits récents</h2>
     <p class="text-center px-8 text-gray-700">
@@ -50,7 +51,7 @@
 <!-- END RECENT PRODUCTS -->
 
 <!-- LATEST COLLECTIONS -->
-<div class="flex flex-col gap-20 my-20">
+<div class="flex flex-col gap-20 my-20 lg:my-32 bg-orange-200 py-12 lg:py-24 shadow-[0_0_64px_0_rgba(30,30,30,0.2)]">
   <header class="flex flex-col items-center">
     <h2 class="text-center text-xl lg:text-2xl text-primary font-bold uppercase">Nos collections</h2>
     <p class="text-center px-8 text-gray-700">Toujours quelque chose de spécial pour vous</p>
@@ -62,7 +63,7 @@
       <IconArrowRight />
     </a>
   </header>
-  <section class="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
+  <section class="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12 w-screen lg:w-5/6 mx-auto">
     {#each collections.collections as collection}
       <CollectionCard {collection} />
     {/each}
@@ -71,7 +72,7 @@
 <!-- END LATEST COLLECTIONS -->
 
 <!-- BEST SOLD PRODUCTS -->
-<div class="flex flex-col gap-20 my-20">
+<div class="flex flex-col gap-20 my-20 w-screen lg:w-5/6 mx-auto">
   <header>
     <h2 class="text-center text-xl lg:text-2xl text-primary font-bold uppercase">Les plus vendus</h2>
     <p class="text-center px-8 text-gray-700">
@@ -87,3 +88,4 @@
 <!-- END BEST SOLD PRODUCTS -->
 
 {/if}
+

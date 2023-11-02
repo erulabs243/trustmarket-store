@@ -47,13 +47,17 @@
   // FIXME Redirect to shipping after login if from cart
 </script>
 
-<button class="btn btn-primary rounded-3xl" on:click={() => document.querySelector("#loginForm").showModal()}>
+<button class="btn btn-secondary rounded-3xl hidden lg:flex" on:click={() => document.querySelector("#loginForm").showModal()}>
   {label}
+</button>
+
+<button class="lg:hidden btn btn-circle" on:click={() => document.querySelector("#loginForm").showModal()}>
+  <IconUser />
 </button>
 
 <!-- START LOGIN MODAL-->
 <dialog id="loginForm" class="modal modal-bottom sm:modal-middle">
-  <div class="modal-box">
+  <div class="modal-box pb-8">
     <div class="tabs tabs-boxed mb-8">
       <button
         class={`tab tab-lg w-1/2 ${form === "login" ? "tab-active" : ""}`}
@@ -110,7 +114,7 @@
                 <input
                   type="text"
                   name="username"
-                  class="input w-full focus:outline-none px-0"
+                  class="input w-full bg-white focus:outline-none px-0"
                   placeholder="utilisateur"
                   bind:value={username}
                 />
@@ -124,7 +128,7 @@
                 <input
                   type="password"
                   name="password"
-                  class="input w-full focus:outline-none px-0"
+                  class="input w-full bg-white focus:outline-none px-0"
                   placeholder="********"
                   bind:value={password}
                 />
@@ -132,7 +136,7 @@
             </div>
             <button
               type="submit"
-              class={`btn btn-primary rounded-3xl ${
+              class={`btn btn-secondary rounded-3xl ${
                 loading ? "btn-disabled" : ""
               }`}
             >
@@ -196,7 +200,7 @@
                 <input
                   type="email"
                   name="email"
-                  class="input w-full focus:outline-none px-0"
+                  class="input w-full bg-white focus:outline-none px-0"
                   placeholder="xyz@example.cd"
                   bind:value={email}
                 />
@@ -216,7 +220,7 @@
                 <input
                   type="text"
                   name="firstName"
-                  class="input w-full focus:outline-none px-0"
+                  class="input w-full bg-white focus:outline-none px-0"
                   placeholder="Nom"
                   bind:value={firstName}
                 />
@@ -237,7 +241,7 @@
                 <input
                   type="text"
                   name="lastName"
-                  class="input w-full focus:outline-none px-0"
+                  class="input w-full bg-white focus:outline-none px-0"
                   placeholder="Prénom"
                   bind:value={lastName}
                 />
@@ -256,7 +260,7 @@
                 <input
                   type="tel"
                   name="phone"
-                  class="input w-full focus:outline-none px-0"
+                  class="input w-full bg-white focus:outline-none px-0"
                   placeholder="+243000000000"
                   bind:value={phone}
                 />
@@ -277,7 +281,7 @@
                 <input
                   type="password"
                   name="password"
-                  class="input w-full focus:outline-none px-0"
+                  class="input w-full bg-white focus:outline-none px-0"
                   placeholder="********"
                   bind:value={password}
                 />
@@ -292,7 +296,7 @@
             </div>
             <button
               type="submit"
-              class={`btn btn-primary rounded-3xl ${
+              class={`btn btn-secondary rounded-3xl ${
                 loading ? "btn-disabled" : ""
               }`}
             >

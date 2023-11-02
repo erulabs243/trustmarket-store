@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { CartStoreItem, UserSession } from "$lib/types/commons";
-  import { IconMenu2, IconSearch, IconShoppingBag, IconShoppingBagCheck, IconShoppingBagX } from "@tabler/icons-svelte";
+  import { IconCategory, IconCategory2, IconHome, IconInfoSmall, IconMail, IconMenu2, IconPhone, IconPhoneCall, IconSearch, IconShoppingBag, IconShoppingBagCheck, IconShoppingBagX } from "@tabler/icons-svelte";
     import Login from "./Login.svelte";
     import { enhance } from "$app/forms";
   import userStore from "$lib/stores/user";
@@ -20,40 +20,68 @@
 
 </script>
 
-<div class="navbar bg-base-100">
-  <div class="flex-1">
+<div class="navbar bg-base-200/50 backdrop-blur-xl w-screen py-4 shadow-lg sticky top-0 z-40">
+  <div class="w-full lg:w-5/6 mx-auto flex flex-col gap-2">
+    <!-- HEAD NAVBAR -->
+    <div class="flex flex-row gap-8 w-screen lg:w-full">
+  <div class="flex lg:w-1/4">
     <div class="dropdown sm:hidden">
       <button tabindex="0" class="btn btn-ghost btn-circle btn-neutral">
         <IconMenu2 />
       </button>
 
-        <div class="mt-4 z-[1] dropdown-content menu shadow bg-base-100 rounded-box w-48" tabindex="0">
-          <li><a href="/">Accueil</a></li>
-          <li><a href="/store/categories">Nos catégories</a></li>
-          <li><a href="/store/collections">Nos collections</a></li>
+        <div class="mt-4 z-[1] dropdown-content menu shadow bg-base-100 rounded-box w-screen" tabindex="0">
+          <li>
+              <a href="/">
+                <IconHome color="#4b5563" />
+                Accueil
+              </a>
+          </li>
+          <li>
+            <a href="/store/categories">
+              <IconCategory color="#4b5563" />  
+              Nos catégories
+            </a>
+          </li>
+          <li>
+            <a href="/store/collections">
+              <IconCategory2 color="#4b5563" />
+              Nos collections
+            </a>
+          </li>
+          <li>
+            <a href="/contact">
+              <IconPhoneCall color="#4b5563" />
+              Contactez-nous
+            </a>
+          </li>
+          <li>
+            <div class="w-full rounded-3xl flex flex-row items-center gap-2 mt-4">
+              <input type="search" class="input rounded-3xl w-full bg-white text-sm" placeholder="Rechercher un produit..." />
+                <button class="btn btn-secondary btn-circle">
+                  <IconSearch />
+                </button>
+            </div>
+          </li>
         </div>
     </div>
     <a class="btn btn-ghost normal-case text-xl" href="/">TrustMarket</a>
   </div>
-  <div class="navbar-center hidden lg:flex">
-    <ul class="menu menu-horizontal px-1">
-      <li><a href="/">Accueil</a></li>
-      <li><a href="/store/categories">Nos catégories</a></li>
-      <li><a href="/store/collections">Nos collections</a></li>
-    </ul>
-  </div>
-  <div class="navbar-end justify-end gap-4 ">
-    <div class="form-control w-full flex flex-row items-center gap-2 hidden lg:flex">
+  <div class="hidden lg:flex flex-1 lg:w-2/4">
+    <div class="form-control w-full flex flex-row items-center gap-2 hidden lg:flex rounded-3xl bg-white pl-4">
       <IconSearch size={24} stroke={1} />
       <input
         type="search"
         placeholder="Rechercher un produit..."
-        class="input w-full rounded-lg"
+        class="input w-full bg-white rounded-3xl"
       />
-      <button type="submit" class="btn btn-secondary rounded-lg">
+      <button type="submit" class="btn btn-secondary rounded-3xl">
         Rechercher
       </button>
     </div>
+  </div>
+  <div class="flex justify-end gap-4 lg:w-1/4">
+      
     <div class="dropdown dropdown-end">
       <button tabindex="0" class="btn btn-outline btn-neutral rounded-3xl w-24 lg:w-32">
         <IconShoppingBag />
@@ -135,4 +163,58 @@
     {/if}
     
   </div>
+      </div>
+    <!-- END HEAD NAVBAR -->
+
+    <!-- BOTTOM NAVBAR -->
+    <div class="hidden lg:flex flex-row gap-8 justify-between w-full">
+
+      <!-- MENU -->
+      <ul class="menu menu-horizontal rounded-box">
+        <li>
+          <a href="/">
+            <IconHome color="#4b5563" />
+            Accueil
+          </a>
+        </li>
+        <li>
+          <a href="/store/categories">
+            <IconCategory color="#4b5563" />    
+            Catégories
+          </a>
+        </li>
+        <li>
+          <a href="/store/collections">
+            <IconCategory2 color="#4b5563" />
+            Collections
+          </a>
+        </li>
+        <li>
+          <a href="/contact">
+            <IconPhoneCall color="#4b5563" />
+            Contactez-nous
+          </a>
+        </li>
+      </ul>
+      <!-- END MENU -->
+
+      <!-- INFOS -->
+      <ul class="menu menu-horizontal">
+        <li>
+          <p>
+            <IconPhone color="#4b5563" />
+            +243 000 000 000
+          </p>
+        </li>
+        <li>
+          <a href="mailto:info@trustmarket.store">
+            <IconMail color="#4b5563" />
+            info@trustmarket.store
+          </a>
+        </li>
+      </ul>
+      <!-- END INFOS -->
+    </div>
+    <!-- END BOTTOM NAVBAR -->
+    </div>
 </div>

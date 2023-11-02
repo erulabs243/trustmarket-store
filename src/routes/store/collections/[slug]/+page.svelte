@@ -7,6 +7,8 @@
   export let { empty, collection, products } = data;
 </script>
 
+<main class="w-screen lg:w-5/6 mx-auto">
+
 {#if $navigating}
 	<div class="alert alert-success">
     Chargement...
@@ -28,3 +30,4 @@
 </div>
 
 {/if}
+</main>

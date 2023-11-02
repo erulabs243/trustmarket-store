@@ -13,6 +13,8 @@
   $: user = data.user;
 </script>
 
+<main class="w-full lg:w-5/6 mx-auto">
+
 {#if $navigating}
 	<div class="alert alert-success">
     Chargement...
@@ -108,3 +110,5 @@
 </div>
 
 {/if}
+
+</main>

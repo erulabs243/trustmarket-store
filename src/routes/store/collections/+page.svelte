@@ -8,6 +8,8 @@
   export let collections = data.collections;
 </script>
 
+<main class="w-screen lg:w-5/6 mx-auto">
+
 {#if $navigating}
 	<div class="alert alert-success">
     Chargement...
@@ -16,8 +18,8 @@
 
 <div class="flex flex-col gap-24 my-8 lg:my-24">
   {#each collections as collection}
-    <section class="flex flex-col gap-8">
-      <header class="flex flex-col lg:flex-row gap-4 items-center justify-between">
+    <section class="flex flex-col gap-8 ">
+      <header class="flex flex-col lg:flex-row gap-4 items-center justify-between px-0 lg:px-4">
     <h2 class="text-center text-xl lg:text-2xl text-neutral font-bold uppercase">{collection.collection.title}</h2>
         <a
           href={`/store/collections/${collection.collection.handle}`}
@@ -37,3 +39,5 @@
 </div>
 
 {/if}
+
+</main>

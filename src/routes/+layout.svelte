@@ -7,6 +7,7 @@
     import { cartStore, cartTotalStore } from "$lib/stores/cart";
     import type { LineItemType } from "$lib/types/apiType";
     import type { UserSession } from "$lib/types/commons";
+    import Footer from "$lib/components/Footer.svelte";
 
   export let data: LayoutData;
   let cart: Array<LineItemType>;
@@ -29,3 +30,4 @@
 
 <Navbar />
 <slot />
+<Footer />
