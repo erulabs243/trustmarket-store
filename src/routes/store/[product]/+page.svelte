@@ -34,7 +34,7 @@
 </script>
 
 <SeoProduct 
-  description={product.description}
+  description={product.subtitle ?? product.description}
   keywords={`${APPNAME}, ${product.title}, Vente en ligne, Congo, RDC`}
   metaType="article"
   image={product.thumbnail}
