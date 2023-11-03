@@ -6,6 +6,8 @@
     import { cartStore, cartTotalStore } from "$lib/stores/cart";
     import { goto } from "$app/navigation";
   import { navigating } from "$app/stores";
+    import Seo from "$lib/components/Seo.svelte";
+    import { URL } from "$lib/constants";
 
   export let data: PageData;
   let provider: string;
@@ -37,6 +39,8 @@
   };
 
 </script>
+
+<Seo description="Mode de paiement" url={`${URL}/cart/payment`}/>
 
 <main class="w-screen lg:w-5/6 mx-auto">
 

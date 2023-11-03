@@ -28,6 +28,10 @@
   //TODO load cart data in header
 </script>
 
-<Navbar />
-<slot />
-<Footer />
+<div class="w-screen">
+
+  <Navbar />
+    <slot />
+  <Footer />
+
+</div>

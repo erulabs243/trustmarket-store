@@ -7,6 +7,8 @@
   import { addToCartSchema } from "$lib/schemas/storeSchema";
   import { cartStore, cartTotalStore } from "$lib/stores/cart";
   import { navigating } from "$app/stores";
+    import SeoProduct from "$lib/components/SeoProduct.svelte";
+    import { APPNAME, URL } from "$lib/constants";
 
   export let data: PageData;
   export let { product, related } = data;
@@ -30,6 +32,16 @@
   const changeVariant = (id: number) => (variant = id);
   const changeImage = (id: number) => (image = id);
 </script>
+
+<SeoProduct 
+  description={product.description}
+  keywords={`${APPNAME}, ${product.title}, Vente en ligne, Congo, RDC`}
+  metaType="article"
+  image={product.thumbnail}
+  url={`${URL}/store/${product.handle}`}
+  price={product.variants[variant].prices[0].amount}
+  variant={product.variants[variant].title}
+/>
 
 <main class="w-screen lg:w-5/6 mx-auto">
 

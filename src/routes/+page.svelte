@@ -4,12 +4,15 @@
   import { IconArrowRight } from "@tabler/icons-svelte";
   import type { PageData } from "./$types";
   import { navigating } from "$app/stores";
+    import Seo from "$lib/components/Seo.svelte";
 
   export let data: PageData;
   export let products = data.products;
   export let collections = data.collections;
   export let latest = data.collections.collections[0];
 </script>
+
+<Seo />
 
 
 {#if $navigating}

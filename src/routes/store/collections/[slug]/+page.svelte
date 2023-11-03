@@ -2,10 +2,17 @@
   import ProductCard from "$lib/components/ProductCard.svelte";
   import type { PageData } from "./$types";
   import { navigating } from "$app/stores";
+    import Seo from "$lib/components/Seo.svelte";
+    import { URL } from "$lib/constants";
 
   export let data: PageData;
   export let { empty, collection, products } = data;
 </script>
+
+<Seo 
+  description={collection.metadata?.description ?? collection.title} 
+  url={`${URL}/store/collections/${collection.handle}`}
+/>
 
 <main class="w-screen lg:w-5/6 mx-auto">
 

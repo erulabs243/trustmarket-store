@@ -6,12 +6,15 @@
   import { navigating } from "$app/stores";
   import userStore from "$lib/stores/user";
   import Login from "$lib/components/Login.svelte";
+    import Seo from "$lib/components/Seo.svelte";
 
   export let data: PageData;
 
   $: cart = data.cart;
   $: user = data.user;
 </script>
+
+<Seo description="Mon panier" />
 
 <main class="w-full lg:w-5/6 mx-auto">
 

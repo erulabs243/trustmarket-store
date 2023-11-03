@@ -3,10 +3,19 @@
   import type { PageData } from "./$types";
   import ProductCard from "$lib/components/ProductCard.svelte";
   import { navigating } from "$app/stores";
+    import Seo from "$lib/components/Seo.svelte";
+    import { APPNAME, URL } from "$lib/constants";
 
   export let data: PageData;
   export let collections = data.collections;
 </script>
+
+<Seo 
+  title="Collections"
+  description={`Des produits exceptionnels à explorer sur ${APPNAME}`}
+  keywords={`${APPNAME}, Collections, RDC, Congo, Vente en ligne`}
+  url={`${URL}/store/collections`}
+/>
 
 <main class="w-screen lg:w-5/6 mx-auto">
 

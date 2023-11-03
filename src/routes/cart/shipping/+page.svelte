@@ -10,6 +10,8 @@ import type { PageData } from "./$types";
     import type { CartRes } from "$lib/types/apiResponse";
     import { HTTPError } from "ky";
   import { navigating } from "$app/stores";
+    import Seo from "$lib/components/Seo.svelte";
+    import { URL } from "$lib/constants";
   
   export let data: PageData;
   let loading: boolean = false;
@@ -49,6 +51,8 @@ import type { PageData } from "./$types";
   }
   
 </script>
+
+<Seo description="Méthodes de livraison" url={`${URL}/cart/shipping`} />
 
 <main class="w-screen lg:w-5/6 mx-auto">
 
