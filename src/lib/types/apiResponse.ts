@@ -34,6 +34,10 @@ export interface CategoryRes {
 	limit: number;
 }
 
+export interface ProductCategoryRes {
+	product_category: CategoryType;
+}
+
 export interface CartRes {
 	cart: CartType;
 }

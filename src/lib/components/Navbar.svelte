@@ -8,6 +8,7 @@
     import { cartStore, cartTotalStore } from "$lib/stores/cart";
     import type { LineItemType } from "$lib/types/apiType";
     import { displayCurrency } from "$lib/utils/lang";
+    import { PHONE_NUM_AIRTEL } from "$lib/constants";
 
   let user: UserSession | null = $userStore;
   let cart: Array<LineItemType>;
@@ -65,7 +66,9 @@
           </li>
         </div>
     </div>
-    <a class="btn btn-ghost normal-case text-xl" href="/">TrustMarket</a>
+    <a class="btn btn-ghost normal-case text-xl" href="/">
+      <img src="$lib/assets/logo.png" alt="TrustMarket" class="h-6 md:h-8" />    
+    </a>
   </div>
   <div class="hidden lg:flex flex-1 lg:w-2/4">
     <div class="form-control w-full flex flex-row items-center gap-2 hidden lg:flex rounded-3xl bg-white pl-4">
@@ -203,7 +206,7 @@
         <li>
           <p>
             <IconPhone color="#4b5563" />
-            +243 000 000 000
+            {PHONE_NUM_AIRTEL}
           </p>
         </li>
         <li>
