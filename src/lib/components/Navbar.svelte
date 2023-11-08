@@ -1,14 +1,16 @@
 <script lang="ts">
-    import type { CartStoreItem, UserSession } from "$lib/types/commons";
-  import { IconCategory, IconCategory2, IconHome, IconInfoSmall, IconMail, IconMenu2, IconPhone, IconPhoneCall, IconSearch, IconShoppingBag, IconShoppingBagCheck, IconShoppingBagX } from "@tabler/icons-svelte";
+    import type { UserSession } from "$lib/types/commons";
+  import { IconCategory, IconCategory2, IconHome, IconMail, IconMenu2, IconPhone, IconPhoneCall, IconSearch, IconShoppingBag, IconShoppingBagX } from "@tabler/icons-svelte";
     import Login from "./Login.svelte";
     import { enhance } from "$app/forms";
   import userStore from "$lib/stores/user";
     import { goto, invalidateAll } from "$app/navigation";
     import { cartStore, cartTotalStore } from "$lib/stores/cart";
-    import type { LineItemType } from "$lib/types/apiType";
+    import type { CategoryType, LineItemType } from "$lib/types/apiType";
     import { displayCurrency } from "$lib/utils/lang";
     import { PHONE_NUM_AIRTEL } from "$lib/constants";
+
+  export let categories: Array<CategoryType> = [];
 
   let user: UserSession | null = $userStore;
   let cart: Array<LineItemType>;
@@ -19,6 +21,7 @@
 
   userStore.subscribe(value => user = value);
 
+  // FIXME close submenus after clicking outside on the document
 </script>
 
 <div class="navbar bg-base-200/50 backdrop-blur-xl w-screen py-4 shadow-lg sticky top-0 z-40">
@@ -38,16 +41,58 @@
                 Accueil
               </a>
           </li>
+        {#if categories.length > 0}
           <li>
-            <a href="/store/categories">
-              <IconCategory color="#4b5563" />  
-              Nos catégories
-            </a>
+            <details>
+              <summary class="dropdown">
+                <IconCategory color="#4b5563" />
+                Catégories
+              </summary>
+
+              <ul class="menu" id="categories-menu">
+                {#each categories as category}
+                  {#if !category.parent_category && category.category_children.length > 0}
+                    <li>
+                    <details>
+                      <summary>{category.name}</summary>
+                      <ul class="menu">
+                      	{#each category.category_children as child}
+                          {#if child.category_children.length > 0}
+                          	<li>
+                              <details>
+                                <summary>{child.name}</summary>
+                                <ul class="menu">
+                                  {#each child.category_children as subchild}
+                                  	<li><a href={`/store/categories/${subchild.handle}`}>{subchild.name}</a></li>
+                                  {/each}
+                                  <li class="border border-gray-300 rounded-lg bg-base-200"><a href={`/store/categories/${child.handle}`}>{child.name}</a></li>
+                                </ul>
+                              </details>
+                            </li>
+                            <li class="border border-gray-300 rounded-lg bg-base-200"><a href={`/store/categories/${category.handle}`}>{category.name}</a></li>
+                          {:else}
+                            <li><a href={`/store/categories/${child.handle}`}>{child.name}</a></li>
+                          {/if}
+                        {/each}
+                      </ul>
+                    </details>
+                    </li>
+                  {:else if !category.parent_category_id}
+                  	<li>
+                      <a href={`/store/categories/${category.handle}`}>
+                        {category.name}
+                      </a>
+                    </li>
+                  {/if}
+                {/each}
+              </ul>
+            </details>
           </li>
+        {/if}
           <li>
             <a href="/store/collections">
               <IconCategory2 color="#4b5563" />
-              Nos collections
+              Collections
             </a>
           </li>
           <li>
@@ -180,12 +225,54 @@
             Accueil
           </a>
         </li>
-        <li>
-          <a href="/store/categories">
-            <IconCategory color="#4b5563" />    
-            Catégories
-          </a>
-        </li>
+        {#if categories.length > 0}
+          <li>
+            <details>
+              <summary class="dropdown">
+                <IconCategory color="#4b5563" />
+                Catégories
+              </summary>
+
+              <ul class="menu w-64" id="categories-menu">
+                {#each categories as category}
+                  {#if !category.parent_category && category.category_children.length > 0}
+                    <li>
+                    <details>
+                      <summary>{category.name}</summary>
+                      <ul class="menu">
+                      	{#each category.category_children as child}
+                          {#if child.category_children.length > 0}
+                          	<li>
+                              <details>
+                                <summary>{child.name}</summary>
+                                <ul class="menu">
+                                  {#each child.category_children as subchild}
+                                  	<li><a href={`/store/categories/${subchild.handle}`}>{subchild.name}</a></li>
+                                  {/each}
+                                  <li class="border border-gray-300 rounded-lg bg-base-200"><a href={`/store/categories/${child.handle}`}>{child.name}</a></li>
+                                </ul>
+                              </details>
+                            </li>
+                            <li class="border border-gray-300 rounded-lg bg-base-200 mb-1"><a href={`/store/categories/${category.handle}`}>{category.name}</a></li>
+                          {:else}
+                            <li><a href={`/store/categories/${child.handle}`}>{child.name}</a></li>
+                          {/if}
+                        {/each}
+                      </ul>
+                    </details>
+                    </li>
+                  {:else if !category.parent_category_id}
+                  	<li>
+                      <a href={`/store/categories/${category.handle}`}>
+                        {category.name}
+                      </a>
+                    </li>
+                  {/if}
+                {/each}
+              </ul>
+            </details>
+          </li>
+        {/if}
         <li>
           <a href="/store/collections">
             <IconCategory2 color="#4b5563" />

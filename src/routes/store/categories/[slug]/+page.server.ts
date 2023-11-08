@@ -13,7 +13,7 @@ export const load = (async ({ params }) => {
 	const { slug } = params;
 
 	const categories = (await api
-		.get(`product-categories?handle=${slug}`)
+		.get(`product-categories?handle=${slug}&include_descendants_tree=true`)
 		.json()) as CategoryRes;
 	if (categories.count === 0) {
 		throw fail(404, { notFound: true });

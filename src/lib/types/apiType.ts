@@ -20,6 +20,9 @@ export type CategoryType = {
 	is_internal: boolean;
 	parent_category_id: Nullable<string>;
 	rank: number;
+	category_children: Array<CategoryType>;
+	parent_category: Nullable<CategoryType>;
+	products: Array<ProductType>;
 };
 
 export type CollectionType = {

@@ -13,6 +13,7 @@
   let cart: Array<LineItemType>;
   let cartTotal: number;
   let user: UserSession | null;
+  let categories = data.categories;
   
   $cartStore = data.cart?.cart.items ?? [];
   $cartTotalStore = Number(data.cart?.cart.total) ?? 0;
@@ -25,12 +26,13 @@
   onDestroy(unsubscribeCart);
   onDestroy(unsubscribeTotal);
 
+  //FIXME hide submenus when route change
   //TODO load cart data in header
 </script>
 
 <div class="w-screen">
 
-  <Navbar />
+  <Navbar {categories} />
     <slot />
   <Footer />
 

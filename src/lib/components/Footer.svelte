@@ -7,7 +7,7 @@
 
 <div class="w-screen bg-base-200 mt-12 pt-12 shadow-[0_-8px_36px_0_rgba(30,30,30,0.3)]">
 <footer class="footer p-10 w-screen lg:w-5/6 mx-auto bg-base-200 text-base-content">
-  <aside class="items-start grid-flow-col">
+  <aside class="items-start grid-flow-col hidden md:flex">
       <img src="$lib/assets/logo-icon.png" class="w-12" />
     <div>
         <p>
@@ -57,6 +57,21 @@
     </div>
   </nav>
   </div>
+  <aside class="items-start grid-flow-col md:hidden">
+      <img src="$lib/assets/logo-icon.png" class="w-12" />
+    <div>
+        <p>
+          <span class="text-lg text-secondary">TrustMarket</span> <br/>{DESCRIPTION}
+        </p>
+      <div class="my-2">
+          <ul>
+            <li>{PHONE_NUM_AIRTEL}</li>
+            <li>{PHONE_NUM_AFRICELL}</li>
+            <li class="mt-2"><a href={`mailto:${INFO_EMAIL}`}>{INFO_EMAIL}</a></li>
+          </ul>
+      </div>
+    </div>
+  </aside> 
 </footer> 
 <footer class="footer px-10 py-4 border-t bg-base-200 justify-center lg:justify-between items-center text-base-content border-base-300 w-screen lg:w-5/6 mx-auto">
   <a class="link link-hover" href="/">Copyright &copy; {year} - Tous droits réservés</a>
