@@ -1,12 +1,14 @@
 <script lang="ts">
   import type { ProductType } from "$lib/types/apiType";
   import { displayCurrency } from "$lib/utils/lang";
+  import { goto } from "$app/navigation";
 
   export let product: ProductType;
+
+  const navigateTo = () => goto(`/store/${product.handle}`);
 </script>
 
-  <div class="card bg-base-200 shadow-xl">
-    <a href={`/store/${product.handle}`} class="block w-full h-full">
+  <div class="card bg-base-200 shadow-xl" on:click={navigateTo}>
     <figure class="mx-2 lg:mx-4 mt-2 lg:mt-4 h-44 bg-neutral-300 rounded-xl">
       <img src={product.thumbnail} alt={product.title} class="object-cover" />
     </figure>
@@ -22,5 +24,4 @@
         </div>
       {/if}
     </div>
-    </a>
   </div>
