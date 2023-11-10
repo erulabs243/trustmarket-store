@@ -82,7 +82,7 @@
       </figure>
     </aside>
     <aside class="flex flex-col gap-2 lg:gap-4 flex-1">
-      <h2 class="text-xl text-neutral">{product.title}</h2>
+      <h2 class="text-xl text-neutral uppercase">{product.title}</h2>
       <div class="flex items-center">
         <p>
           <span class="font-bold text-2xl text-neutral"
