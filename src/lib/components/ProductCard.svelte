@@ -5,8 +5,8 @@
   export let product: ProductType;
 </script>
 
-<a href={`/store/${product.handle}`}>
   <div class="card bg-base-200 shadow-xl">
+    <a href={`/store/${product.handle}`} class="block w-full h-full">
     <figure class="mx-2 lg:mx-4 mt-2 lg:mt-4 h-44 bg-neutral-300 rounded-xl">
       <img src={product.thumbnail} alt={product.title} class="object-cover" />
     </figure>
@@ -22,5 +22,5 @@
         </div>
       {/if}
     </div>
+    </a>
   </div>
-</a>
