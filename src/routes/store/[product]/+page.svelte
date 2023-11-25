@@ -63,7 +63,7 @@
             on:click={() => changeImage(id)}
             on:keydown={() => changeImage(id)}
           >
-            <figure class={`bg-base-100 p-0 rounded-xl ${image === id ? "border-2 border-gray-700" : ""}`}>
+            <figure class={`bg-base-100 p-0 rounded-xl overflow-hidden ${image === id ? "border-2 border-gray-700" : ""}`}>
             <img
               src={img.url}
               alt={product.title}
@@ -73,11 +73,11 @@
           </button>
         {/each}
       </div>
-      <figure class="bg-base-300 p-0 rounded-xl w-full">
+      <figure class="bg-base-300 p-0 max-h-48 lg:max-h-96 rounded-xl w-full overflow-hidden">
       <img
         src={product.images[image].url}
         alt={product.title}
-        class="rounded-xl h-48 w-full lg:h-96 object-cover mx-auto"
+        class="rounded-xl h-full w-full lg:h-full object-cover mx-auto"
       />
       </figure>
     </aside>
