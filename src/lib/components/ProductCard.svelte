@@ -12,7 +12,7 @@
       <img src={product.thumbnail} alt={product.title} class="object-cover rounded-xl" />
     </figure>
     <div class="card-body items-center text-center -mt-4 md:mt-0 max-h-44">
-      <h4 class="card-title font-normal text-sm lg:text-lg uppercase leading-snug lg:leading-relaxed link link-hover line-clamp-2">{product.title}</h4>
+      <h4 class="card-title font-normal text-xs lg:text-md uppercase leading-snug lg:leading-relaxed link link-hover line-clamp-2">{product.title}</h4>
       {#if product.variants}
         <p class="font-bold">{displayCurrency(product.variants[0].prices[0].amount)}</p>
         <div class="card-actions">
