@@ -2,9 +2,8 @@
     import { displayCurrency } from "$lib/utils/lang";
     import { superForm } from "sveltekit-superforms/client";
 import type { PageData } from "./$types";
-    import { IconBuildingBank, IconMapPin, IconPhone, IconPlus, IconTarget, IconUser } from "@tabler/icons-svelte";
+    import { IconBuildingBank, IconCheck, IconMapPin, IconPhone, IconPlus, IconTarget, IconUser } from "@tabler/icons-svelte";
     import { addressSchema } from "$lib/schemas/storeSchema";
-    import type { ShippingMethodType, } from "$lib/types/apiType";
     import { goto, invalidateAll } from "$app/navigation";
     import api from "$lib/apiClient";
     import type { CartRes } from "$lib/types/apiResponse";
@@ -16,12 +15,11 @@ import type { PageData } from "./$types";
   export let data: PageData;
   let loading: boolean = false;
 
-  let {cart, addresses, options} = data;
-
   const {form, enhance, errors, message, delayed} = superForm(data.form, {
     validators: addressSchema,
     onResult: ({ result }) => {
-    console.log(result);
+    cart = {cart: result.data.cart };
+    options = result.data.options;
   
       if(result.status === 200) {
         document.querySelector("#addressForm").close();
@@ -29,6 +27,29 @@ import type { PageData } from "./$types";
       }
     }
   });
+
+
+  // Update shipping address
+  const updateShippingAddress = async (address: string) => {
+    try {
+      loading = true;
+      
+      const res = (await api.post(`carts/${cart.cart.id}`, {
+        json: { shipping_address: address },
+        credentials: "include"
+      }).json()) as CartRes;
+
+      cart = res;
+      loading = false;
+      
+    } catch (error) {
+      if(error instanceof HTTPError) {
+        console.error(error.response);
+      }
+      console.error(error);
+      loading = false;
+    }
+  }
 
   //Handle shipping option
   const handleShipping = async (option: string) => {
@@ -49,7 +70,10 @@ import type { PageData } from "./$types";
     loading = false;
   }
   }
-  
+
+  $: cart = data.cart;
+  $: addresses = data.addresses;
+  $: options = data.options;
 </script>
 
 <Seo description="Méthodes de livraison" url={`${URL}/cart/shipping`} />
@@ -67,13 +91,43 @@ import type { PageData } from "./$types";
 
     <!-- SHIPPING SECTION -->
     <section class="w-full lg:w-2/3 py-4 px-4 lg:p-12">
-    {#if addresses.length > 0}
-    	{#each addresses as address}
-      	<div class="alert">{address.city}</div>
-      {/each}
-    {/if}
+      <div class="flex flex-col gap-2">
+    {#if addresses.length === 0}
+          {#if cart.cart.shipping_address_id && cart.cart.shipping_address}
 
-    <button class="btn btn-primary btn-block rounded-3xl my-4" on:click={() => document.querySelector("#addressForm").showModal()}>
+        	<div class="flex flex-row items-start bg-secondary gap-2 p-4 rounded-xl">
+        	  <div class="grow">
+        	    <p class="text-gray-50 font-bold text-lg">{`${cart.cart.shipping_address.first_name} ${cart.cart.shipping_address.last_name}`}</p>
+        	    <p class="text-gray-100 text-sm">{`${cart.cart.shipping_address.address_1} ${cart.cart.shipping_address.city}`}</p>
+        	  </div>  
+            <IconCheck size={28} color="white" />
+        	</div>
+          {/if}
+        {:else}
+    	{#each addresses as address}
+        	<div class={`flex ${cart.cart.shipping_address_id === address.id ? "flex-row items-start bg-secondary" : "flex-col md:flex-row items-start md:items-center bg-gray-200"} gap-2 p-4 rounded-xl`}>
+      	  <div class="grow">
+      	    <p class={`${cart.cart.shipping_address_id === address.id ? "text-gray-50" : "text-gray-700" } font-bold text-lg`}>{`${address.first_name} ${address.last_name}`}</p>
+      	    <p class={`${cart.cart.shipping_address_id === address.id ? "text-gray-100" : "text-gray-700" } text-sm`}>{`${address.address_1} ${address.city}`}</p>
+      	  </div>
+      	  
+      	    {#if cart.cart.shipping_address_id === address.id}
+              <IconCheck size={28} color="white" />
+      	    {:else}
+
+              <button class="btn btn-sm btn-outline btn-neutral" on:click={() => updateShippingAddress(address.id)}>
+              {#if loading}
+                <span class="loading loading-spinner"></span>
+              {/if}
+              Choisir l'adresse
+            </button>
+            {/if}
+      	</div>
+      {/each}
+      {/if}
+      </div>
+
+    <button class="btn btn-primary btn-block rounded-3xl my-8" on:click={() => document.querySelector("#addressForm").showModal()}>
       <IconPlus />
       <span>Nouvelle adresse</span>
     </button>
@@ -81,7 +135,7 @@ import type { PageData } from "./$types";
     <dialog id="addressForm" class="modal modal-bottom sm:modal-middle">
       <div class="modal-box w-full max-w-3xl">
     <form method="post" action="/cart/shipping?/add" use:enhance>
-      <h3 class="uppercase font-bold my-4 text-gray-700 ">Nouvelle adresse de livraison</h3>
+      <h3 class="uppercase font-bold my-4 text-gray-700 ">Nouvelle information de livraison</h3>
       <div class="flex flex-col gap-4 mt-8 lg:mt-0">
             {#if $message }
               <div class={`alert my-4 ${$message.status === "error" ? "alert-error" : "alert-success"}`}>
@@ -153,13 +207,12 @@ import type { PageData } from "./$types";
                 class="join items-center gap-2 bg-white px-4 border rounded-3xl"
               >
                 <IconMapPin />
-                <input
-                  type="text"
-                  name="country_code"
-                  class="input w-full bg-white focus:outline-none px-0"
-                  placeholder="Pays"
-                  bind:value={$form.country_code}
-                />
+                <select name="country_code" class="select w-full bg-white focus:outline:none px-0 text-gray-700" bind:value={$form.country_code}>
+                  <option value="cd">RDCongo</option>
+                  <option value="rw">Rwanda</option>
+                  <option value="bu">Burundi</option>
+                  <option value="ug">Ouganda</option>
+                </select>
               </div>
               {#if $errors.country_code}
               	<p class="label">
@@ -285,7 +338,7 @@ import type { PageData } from "./$types";
       </div>
     {/if}
     {#if options && options.shipping_options.length > 0}
-    	<div>
+    	<div class="flex flex-col gap-2">
         {#each options.shipping_options as option}
         	<button class="btn btn-outline rounded-xl btn-block rounded-3xl" on:click={() => handleShipping(option.id)}>
             {option.name}
@@ -307,7 +360,7 @@ import type { PageData } from "./$types";
             <img src={item.thumbnail} alt={item.title} class="rounded-xl w-16 h-16 object-cover" />
           </figure>
           <div>
-            <p>{item.title} <span class="badge badge-secondary badge-sm ml-2">{item.variant?.title}</span></p>
+            <p class="uppercase text-gray-700">{item.title} <span class="badge badge-secondary badge-sm ml-2">{item.variant?.title}</span></p>
             <p class="font-bold">{displayCurrency(item.total)} <span class="text-sm ml-1 font-normal">{`(${item.quantity} item${item.quantity > 1 ? "s" : ""})`}</span></p>
           </div>
         </article>

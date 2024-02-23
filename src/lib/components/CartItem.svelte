@@ -48,7 +48,7 @@
 </script>
 
 <div class="flex flex-col lg:flex-row border-b border-gray-700 gap-8 rounded-none bg-base-200 p-4">
-  <figure class="w-full">
+  <figure class="w-full lg:w-40">
     <img
       src={item.thumbnail}
       alt={item.title}

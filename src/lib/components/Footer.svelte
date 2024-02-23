@@ -1,6 +1,7 @@
 <script lang="ts">
     import { DESCRIPTION, INFO_EMAIL, PHONE_NUM_AFRICELL, PHONE_NUM_AIRTEL } from "$lib/constants";
     import { IconBrandInstagram, IconBrandTelegram, IconBrandWhatsapp, IconBrandYoutube, IconMail, IconPhone } from "@tabler/icons-svelte";
+    import Social from "./Social.svelte";
 
   const year = new Date().getFullYear();
 </script>
@@ -75,22 +76,7 @@
 </footer> 
 <footer class="footer px-10 py-4 border-t bg-base-200 justify-center lg:justify-between items-center text-base-content border-base-300 w-screen lg:w-5/6 mx-auto">
   <a class="link link-hover" href="/">Copyright &copy; {year} - Tous droits réservés</a>
-  <nav class="flex flex-row place-self-end  justify-self-end">
-    <a href="/" class="btn btn-circle">
-      <IconBrandInstagram />
-    </a>
-    <a href="/" class="btn btn-circle">
-      <IconBrandWhatsapp />
-    </a>
-    <a href="/" class="btn btn-circle">
-      <IconBrandYoutube />
-    </a>
-    <a href="/" class="btn btn-circle">
-      <IconBrandTelegram />
-    </a>
-    <a href="/" class="btn btn-circle">
-      <IconMail />
-    </a>
-  </nav>
+  
+    <Social location="footer" />
   <footer>
 </div>

@@ -95,6 +95,17 @@ export const actions = {
 			});
 		}
 
-		return { form, success: true, cart: res.cart };
+		const options = (await api
+			.get(`shipping-options/${cartId}`, {
+				credentials: "include",
+			})
+			.json()) as ShippingOptionsRes;
+
+		return {
+			form,
+			success: true,
+			cart: res.cart,
+			options: options,
+		};
 	},
 } satisfies Actions;

@@ -6,7 +6,7 @@ import type { PageServerLoad } from "./$types";
 export const load = (async () => {
 	const collections = (await api.get("collections").json()) as CollectionsRes;
 
-	let expandedCollections: Array<ExpandedCollection> = [];
+	const expandedCollections: Array<ExpandedCollection> = [];
 	if (collections.collections.length > 0) {
 		for (const collection of collections.collections) {
 			const products = (await api

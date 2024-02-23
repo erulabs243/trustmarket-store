@@ -45,7 +45,6 @@
   {:else}
     <div class="px-4 py-12 lg:px-12 lg:py-12 bg-base-200 rounded-3xl">
       <header class="lg:flex hidden gap-4 items-center bg-base-200 py-4 border-b">
-        <div class="w-40" />
         <div class="w-2/6">
           <p>Produit</p>
         </div>

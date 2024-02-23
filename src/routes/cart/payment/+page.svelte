@@ -151,7 +151,7 @@
             <img src={item.thumbnail} alt={item.title} class="rounded-xl w-16 h-16 object-cover" />
           </figure>
           <div>
-            <p>{item.title} <span class="badge badge-secondary badge-sm ml-2">{item.variant?.title}</span></p>
+            <p class="uppercase text-gray-700">{item.title} <span class="badge badge-secondary badge-sm ml-2">{item.variant?.title}</span></p>
             <p class="font-bold">{displayCurrency(item.total)} <span class="text-sm font-normal ml-1">{`(${item.quantity} item${item.quantity > 1 ? "s" : ""})`}</span></p>
           </div>
         </article>

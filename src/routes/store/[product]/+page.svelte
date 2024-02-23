@@ -34,7 +34,7 @@
 </script>
 
 <SeoProduct 
-  description={product.subtitle ?? product.description}
+  description={product.title ?? product.description}
   keywords={`${APPNAME}, ${product.title}, Vente en ligne, Congo, RDC`}
   metaType="article"
   image={product.thumbnail}
@@ -82,7 +82,16 @@
       </figure>
     </aside>
     <aside class="flex flex-col gap-2 lg:gap-4 flex-1">
-      <h2 class="text-xl text-neutral uppercase">{product.title}</h2>
+      <h2 class="text-xl text-neutral uppercase">
+        {product.title}
+        <div class={`badge badge-sm mx-2 ${product.variants[variant].inventory_quantity === 0 ? "badge-error" : "badge-success"}`}>
+          {#if product.variants[variant].inventory_quantity === 0}
+            Indisponible
+          {:else}
+            Disponible
+          {/if}
+        </div>
+      </h2>
       <div class="flex items-center">
         <p>
           <span class="font-bold text-2xl text-neutral"
@@ -169,7 +178,7 @@
             type="submit"
             class={`btn btn-primary w-2/3 rounded-3xl ${
               $delayed ? "btn-disabled" : ""
-            }`}
+            } ${product.variants[variant].inventory_quantity === 0 ? "btn-disabled" : ""}`}
           >
             Ajouter au panier
             {#if $delayed}

@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { UserSession } from "$lib/types/commons";
-  import { IconCategory, IconCategory2, IconHome, IconMail, IconMenu2, IconPhone, IconPhoneCall, IconSearch, IconShoppingBag, IconShoppingBagX } from "@tabler/icons-svelte";
+  import { IconCategory, IconCategory2, IconHome, IconMail, IconMapPin, IconMenu2, IconPhone, IconPhoneCall,  IconSearch, IconShoppingBag, IconShoppingBagX, IconShoppingCart, IconUser } from "@tabler/icons-svelte";
     import Login from "./Login.svelte";
     import { enhance } from "$app/forms";
   import userStore from "$lib/stores/user";
@@ -184,15 +184,41 @@
       </label>
       <ul
         tabindex="0"
-        class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+        class="menu menu-md dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-72"
       >
         <li>
           <a class="justify-between">
-            Profile
-            <span class="badge">New</span>
+            <p class="flex flex-row items-center gap-1">
+              <IconUser color="#707070" />
+              Profile
+            </p>
           </a>
         </li>
-        <li><a>Settings</a></li>
+        <li>
+          <a href="/cart" class="justify-between">
+            <p class="grow flex flex-row items-center gap-1">
+            <IconShoppingBag color="#707070" />
+            Mon panier
+            </p>
+            <div class="badge badge-secondary">{cart.length}</div>
+          </a>
+        </li>
+        <li>
+          <a href="/user/orders" class="justify-between">
+            <p class="grow flex flex-row items-center gap-1">
+              <IconShoppingCart color="#707070" />
+              Mes commandes
+            </p>
+          </a>
+        </li>
+        <li>
+          <a href="/user/addresses" class="justify-between">
+            <p class="grow flex flex-row items-center gap-1">
+            <IconMapPin color="#707070"/>
+              Mon adresses
+            </p>
+          </a>
+        </li>
         
           <form method="post" action="/auth?/logout" use:enhance={() => {
               return async () => {

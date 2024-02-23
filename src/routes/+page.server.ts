@@ -7,6 +7,9 @@ export const load = (async () => {
 	const collections = (await api
 		.get("collections?limit=3")
 		.json()) as CollectionsRes;
+
+	console.info(JSON.stringify(products, null, 2));
+
 	return {
 		products,
 		collections,

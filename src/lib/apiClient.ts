@@ -1,12 +1,15 @@
 import ky from "ky";
-import { PUBLIC_HOST } from "$env/static/public";
 
 const prod = import.meta.env.PROD;
+const publicHost = import.meta.env.VITE_PUBLIC_HOST;
 
+// const api = ky.create({
+// 	prefixUrl: prod
+// 		? `${publicHost}/store/`
+// 		: "http://192.168.43.134:9000/store/",
+// });
 const api = ky.create({
-	prefixUrl: prod
-		? `${PUBLIC_HOST}/store/`
-		: "http://192.168.1.124:9000/store/",
+	prefixUrl: `${publicHost}/store/`,
 });
 
 api.extend({
