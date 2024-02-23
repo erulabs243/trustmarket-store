@@ -8,8 +8,6 @@ export const load = (async () => {
 		.get("collections?limit=3")
 		.json()) as CollectionsRes;
 
-	console.info(JSON.stringify(products, null, 2));
-
 	return {
 		products,
 		collections,

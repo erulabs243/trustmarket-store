@@ -203,7 +203,7 @@
             <div class="badge badge-secondary">{cart.length}</div>
           </a>
         </li>
-        <li>
+        <!--li>
           <a href="/user/orders" class="justify-between">
             <p class="grow flex flex-row items-center gap-1">
               <IconShoppingCart color="#707070" />
@@ -218,17 +218,11 @@
               Mon adresses
             </p>
           </a>
-        </li>
-        
-          <form method="post" action="/auth?/logout" use:enhance={() => {
-              return async () => {
-              $userStore = null;
-              invalidateAll();
-              goto("/");
-            }
-            }}>
-            <button type="submit" class=" mt-4 btn btn-sm btn-error btn-outline rounded-3xl w-full">Déconnexion</button>
-          </form>
+        </li-->
+
+          <li>
+            <a href="/auth/logout" class=" mt-4 btn btn-sm btn-error btn-outline rounded-3xl w-full">Déconnexion</a>
+            </li>
         
       </ul>
     </div>

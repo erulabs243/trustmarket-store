@@ -1,16 +1,27 @@
 <script lang="ts">
+  import {page} from "$app/stores";
   import { loginSchema } from "$lib/schemas/authSchema";
   import type { PageData } from "./$types";
   import { IconLock, IconUser } from "@tabler/icons-svelte";
   import { superForm } from "sveltekit-superforms/client";
-  import SuperDebug from "sveltekit-superforms/client/SuperDebug.svelte";
+  import userStore from "$lib/stores/user";
+    import { goto, invalidateAll } from "$app/navigation";
 
   export let data: PageData;
   export let usernameInput = "";
   export let passwordInput = "";
 
+  const from = $page.url.search.substring($page.url.search.indexOf("?") + 1)
+
   const { form, errors, enhance } = superForm(data.form, {
     validators: loginSchema,
+    onResult: ({ result }) => {
+      console.info(JSON.stringify(result, null, 2));
+      $userStore = result.data.user;
+      goto(from);
+      invalidateAll();
+      
+    }
   });
   $: usernameInput = $errors.username ? "border-red-500" : "border-gray-500";
   $: passwordInput = $errors.password ? "border-red-500" : "border-gray-500";
@@ -39,7 +50,7 @@
         <input
           type="text"
           name="username"
-          class="input w-full focus:outline-none px-0"
+          class="input w-full focus:outline-none px-0 bg-white"
           placeholder="utilisateur"
           bind:value={$form.username}
         />
@@ -66,8 +77,9 @@
         <input
           type="password"
           name="password"
-          class="input w-full focus:outline-none px-0"
+          class="input w-full focus:outline-none px-0 bg-white"
           placeholder="********"
+          bind:value={$form.password}
         />
       </div>
       {#if $errors.password}
@@ -80,7 +92,7 @@
       <button class="btn btn-primary rounded-3xl" type="submit">
         Connexion
       </button>
-      <a href="/auth/register" class="btn btn-outline rounded-3xl">
+      <a href={`/auth/register?${from}`} class="btn btn-outline rounded-3xl">
         Créer un compte
       </a>
     </div>

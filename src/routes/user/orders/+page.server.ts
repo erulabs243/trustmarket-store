@@ -12,7 +12,6 @@ export const load = (async ({ cookies }) => {
 
 	const parsedSession = JSON.parse(session) as UserSession;
 
-	console.info(JSON.stringify(parsedSession, null, 2));
 	const orders = await api
 		.get("customers/me/orders", {
 			headers: {
@@ -21,8 +20,6 @@ export const load = (async ({ cookies }) => {
 			credentials: "include",
 		})
 		.json();
-
-	console.info(JSON.stringify(orders, null, 2));
 
 	return { orders };
 }) satisfies PageServerLoad;

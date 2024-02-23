@@ -3,12 +3,12 @@ import ky from "ky";
 const prod = import.meta.env.PROD;
 const storeHost = import.meta.env.VITE_STORE_HOST;
 
-// const api = ky.create({
-// 	prefixUrl: prod ? `${storeHost}/store/` : "http://192.168.43.134:9000/store/",
-// });
 const api = ky.create({
-	prefixUrl: `${storeHost}/store/`,
+	prefixUrl: prod ? `${storeHost}/store/` : "http://192.168.43.135:9000/store/",
 });
+// const api = ky.create({
+// 	prefixUrl: `${storeHost}/store/`,
+// });
 
 api.extend({
 	hooks: {

@@ -177,6 +177,8 @@ export const actions = {
 	logout: async ({ cookies }) => {
 		try {
 			const res = await api.delete("auth").json();
+			console.info("From logout function");
+			console.info(JSON.stringify(res, null, 2));
 			cookies.delete("__tm__session");
 			cookies.delete("__tm__cart");
 

@@ -8,9 +8,7 @@
 
   <div class="card bg-base-200 shadow-xl relative text-base">
     <a href={`/store/${product.handle}`} class="absolute top-0 bottom-0 left-0 right-0"></a>
-    <figure class="mx-2 lg:mx-4 mt-2 lg:mt-4 h-44 bg-neutral-300 rounded-xl overflow-hidden">
-      <img src={product.thumbnail} alt={product.title} class="object-cover rounded-xl" />
-    </figure>
+      <img src={product.thumbnail} alt={product.title} class="object-cover rounded-xl mx-2 lg:mx-4 mt-2 lg:mt-4 h-44" />
     <div class="card-body items-center text-center -mt-4 md:mt-0 max-h-44">
       <h4 class="card-title font-normal text-xs lg:text-md uppercase leading-snug lg:leading-relaxed link link-hover line-clamp-2">{product.title}</h4>
       {#if product.variants}
