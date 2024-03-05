@@ -1,14 +1,13 @@
 <script lang="ts">
     import type { UserSession } from "$lib/types/commons";
-  import { IconCategory, IconCategory2, IconHome, IconMail, IconMapPin, IconMenu2, IconPhone, IconPhoneCall,  IconSearch, IconShoppingBag, IconShoppingBagX, IconShoppingCart, IconUser } from "@tabler/icons-svelte";
+  import { IconCategory, IconCategory2, IconHome, IconMail, IconMenu2, IconPhone, IconPhoneCall, IconSearch, IconShoppingBag, IconShoppingBagX,  IconUser } from "@tabler/icons-svelte";
     import Login from "./Login.svelte";
-    import { enhance } from "$app/forms";
   import userStore from "$lib/stores/user";
-    import { goto, invalidateAll } from "$app/navigation";
     import { cartStore, cartTotalStore } from "$lib/stores/cart";
     import type { CategoryType, LineItemType } from "$lib/types/apiType";
     import { displayCurrency } from "$lib/utils/lang";
     import { PHONE_NUM_AIRTEL } from "$lib/constants";
+    import SearchBar from "./SearchBar.svelte";
 
   export let categories: Array<CategoryType> = [];
 
@@ -116,20 +115,83 @@
     </a>
   </div>
   <div class="hidden lg:flex flex-1 lg:w-2/4">
-    <div class="form-control w-full flex flex-row items-center gap-2 hidden lg:flex rounded-3xl bg-white pl-4">
-      <IconSearch size={24} stroke={1} />
-      <input
-        type="search"
-        placeholder="Rechercher un produit..."
-        class="input w-full bg-white rounded-3xl"
-      />
-      <button type="submit" class="btn btn-secondary rounded-3xl">
-        Rechercher
-      </button>
-    </div>
+
+      <!-- MENU -->
+      <ul class="menu menu-horizontal rounded-box">
+        <li>
+          <a href="/">
+            <IconHome color="#4b5563" />
+            Accueil
+          </a>
+        </li>
+        {#if categories.length > 0}
+          <li>
+            <details>
+              <summary class="dropdown">
+                <IconCategory color="#4b5563" />
+                Catégories
+              </summary>
+
+              <ul class="menu w-64" id="categories-menu">
+                {#each categories as category}
+                  {#if !category.parent_category && category.category_children.length > 0}
+                    <li>
+                    <details>
+                      <summary>{category.name}</summary>
+                      <ul class="menu">
+                      	{#each category.category_children as child}
+                          {#if child.category_children.length > 0}
+                          	<li>
+                              <details>
+                                <summary>{child.name}</summary>
+                                <ul class="menu">
+                                  {#each child.category_children as subchild}
+                                  	<li><a href={`/store/categories/${subchild.handle}`}>{subchild.name}</a></li>
+                                  {/each}
+                                  <li class="border border-gray-300 rounded-lg bg-base-200"><a href={`/store/categories/${child.handle}`}>{child.name}</a></li>
+                                </ul>
+                              </details>
+                            </li>
+                            <li class="border border-gray-300 rounded-lg bg-base-200 mb-1"><a href={`/store/categories/${category.handle}`}>{category.name}</a></li>
+                          {:else}
+                            <li><a href={`/store/categories/${child.handle}`}>{child.name}</a></li>
+                          {/if}
+                        {/each}
+                      </ul>
+                    </details>
+                    </li>
+                  {:else if !category.parent_category_id}
+                  	<li>
+                      <a href={`/store/categories/${category.handle}`}>
+                        {category.name}
+                      </a>
+                    </li>
+                  {/if}
+                {/each}
+              </ul>
+            </details>
+          </li>
+        {/if}
+        <li>
+          <a href="/store/collections">
+            <IconCategory2 color="#4b5563" />
+            Collections
+          </a>
+        </li>
+        <li>
+          <a href="/contact">
+            <IconPhoneCall color="#4b5563" />
+            Contactez-nous
+          </a>
+        </li>
+      </ul>
+      <!-- END MENU -->
   </div>
   <div class="flex justify-end gap-4 lg:w-1/4">
       
+    <a href="/search" class="btn btn-circle btn-secondary">
+      <IconSearch />
+    </a>
     <div class="dropdown dropdown-end">
       <button tabindex="0" class="btn btn-outline btn-neutral rounded-3xl w-24 lg:w-32">
         <IconShoppingBag />
@@ -235,7 +297,7 @@
     <!-- END HEAD NAVBAR -->
 
     <!-- BOTTOM NAVBAR -->
-    <div class="hidden lg:flex flex-row gap-8 justify-between w-full">
+    <div class="hidden  flex-row gap-8 justify-between w-full">
 
       <!-- MENU -->
       <ul class="menu menu-horizontal rounded-box">

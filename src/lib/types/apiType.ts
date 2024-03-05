@@ -637,3 +637,12 @@ export type SwapType = {
 	shipping_methods: Array<ShippingMethodType>;
 	cart: Nullable<CartType>;
 };
+
+export type SearchType = {
+	title: string;
+	description: string;
+	handle: string;
+	thumbnail: string;
+	id: string;
+	variants: Array<VariantType>;
+};

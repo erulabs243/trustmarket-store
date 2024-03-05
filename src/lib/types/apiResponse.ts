@@ -6,6 +6,7 @@ import type {
 	OrderType,
 	ProductType,
 	RegionType,
+	SearchType,
 	ShippingOptionType,
 	SwapType,
 	VariantType,
@@ -72,4 +73,10 @@ export interface RegionsRes {
 export interface CompleteCartRes {
 	type: "order" | "cart" | "swap";
 	data: OrderType | CartType | SwapType;
+}
+
+export interface SearchRes {
+	hits: Array<SearchType>;
+	query: string;
+	estimatedTotalHits: number;
 }
