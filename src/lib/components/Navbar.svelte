@@ -1,13 +1,12 @@
 <script lang="ts">
     import type { UserSession } from "$lib/types/commons";
+    import {page} from "$app/stores";
   import { IconCategory, IconCategory2, IconHome, IconMail, IconMenu2, IconPhone, IconPhoneCall, IconSearch, IconShoppingBag, IconShoppingBagX,  IconUser } from "@tabler/icons-svelte";
-    import Login from "./Login.svelte";
   import userStore from "$lib/stores/user";
     import { cartStore, cartTotalStore } from "$lib/stores/cart";
     import type { CategoryType, LineItemType } from "$lib/types/apiType";
     import { displayCurrency } from "$lib/utils/lang";
     import { PHONE_NUM_AIRTEL } from "$lib/constants";
-    import SearchBar from "./SearchBar.svelte";
 
   export let categories: Array<CategoryType> = [];
 
@@ -289,7 +288,9 @@
       </ul>
     </div>
     {:else}
-      <Login label="Connexion" />
+      <a class="btn btn-secondary rounded-3xl hidden lg:flex" href={`/auth/login?from=${$page.url.pathname === "/" ? "/home" : $page.url.pathname}`}>
+        Connexion
+      </a>
     {/if}
     
   </div>

@@ -47,6 +47,11 @@
   // FIXME Redirect to shipping after login if from cart
 </script>
 
+<a class="btn btn-secondary rounded-3xl hidden lg:flex" href="/auth/login">
+  {label}
+</a>
+<!--
+
 <button class="btn btn-secondary rounded-3xl hidden lg:flex" on:click={() => document.querySelector("#loginForm").showModal()}>
   {label}
 </button>
@@ -54,8 +59,10 @@
 <button class="lg:hidden btn btn-circle" on:click={() => document.querySelector("#loginForm").showModal()}>
   <IconUser />
 </button>
+-->
 
 <!-- START LOGIN MODAL-->
+<!--
 <dialog id="loginForm" class="modal modal-bottom sm:modal-middle">
   <div class="modal-box pb-8">
     <div class="tabs tabs-boxed mb-8">
@@ -314,4 +321,5 @@
     <button>close</button>
   </form>
 </dialog>
+-->
 <!-- END LOGIN MODAL -->

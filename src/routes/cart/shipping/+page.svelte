@@ -11,12 +11,13 @@ import type { PageData } from "./$types";
   import { navigating } from "$app/stores";
     import Seo from "$lib/components/Seo.svelte";
     import { URL } from "$lib/constants";
+    import { zodClient } from "sveltekit-superforms/adapters";
   
   export let data: PageData;
   let loading: boolean = false;
 
   const {form, enhance, errors, message, delayed} = superForm(data.form, {
-    validators: addressSchema,
+    validators: zodClient(addressSchema),
     onResult: ({ result }) => {
     cart = {cart: result.data.cart };
     options = result.data.options;
@@ -59,6 +60,7 @@ import type { PageData } from "./$types";
       json: { option_id: option },
       credentials: "include"
     }).json()) as CartRes;
+
 
     loading = false;
     goto("/cart/payment");

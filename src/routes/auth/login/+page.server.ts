@@ -1,6 +1,6 @@
 import type { PageServerLoad, Actions } from "./$types";
-import { z } from "zod";
 import { message, superValidate } from "sveltekit-superforms/server";
+import { zod } from "sveltekit-superforms/adapters";
 import { fail } from "@sveltejs/kit";
 import { loginSchema } from "$lib/schemas/authSchema";
 import api from "$lib/apiClient";
@@ -9,7 +9,7 @@ import type { UserSession } from "$lib/types/commons";
 import { HTTPError } from "ky";
 
 export const load = (async () => {
-	const form = await superValidate(loginSchema);
+	const form = await superValidate(zod(loginSchema));
 
 	return {
 		form,
@@ -18,7 +18,7 @@ export const load = (async () => {
 
 export const actions = {
 	default: async ({ request, cookies }) => {
-		const form = await superValidate<typeof loginSchema>(request, loginSchema);
+		const form = await superValidate(request, zod(loginSchema));
 
 		if (!form.valid) {
 			return message(form, {

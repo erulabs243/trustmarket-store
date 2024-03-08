@@ -5,9 +5,11 @@ import { message, superValidate } from "sveltekit-superforms/server";
 import type { Actions, PageServerLoad } from "./$types";
 import type { CartType, ProductType } from "$lib/types/apiType";
 import { addToCartSchema } from "$lib/schemas/storeSchema";
+import { zod } from "sveltekit-superforms/adapters";
 
 export const load = (async ({ params }) => {
 	const slug = params.product;
+
 	const products = (await api
 		.get(`products?handle=${slug}`)
 		.json()) as ProductRes;
@@ -31,7 +33,7 @@ export const load = (async ({ params }) => {
 	}
 
 	// Use redis session to store cart
-	const form = await superValidate(addToCartSchema);
+	const form = await superValidate(zod(addToCartSchema));
 
 	return {
 		product,
@@ -49,10 +51,7 @@ type Message = {
 export const actions = {
 	default: async ({ request, cookies }) => {
 		const formData = await request.formData();
-		const form = await superValidate<typeof addToCartSchema, Message>(
-			formData,
-			addToCartSchema,
-		);
+		const form = await superValidate(formData, zod(addToCartSchema));
 
 		if (!form.valid) {
 			//return fail(400, { form });

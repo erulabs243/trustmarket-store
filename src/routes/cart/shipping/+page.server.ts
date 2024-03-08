@@ -10,6 +10,7 @@ import type { UserSession } from "$lib/types/commons";
 import { message, superValidate } from "sveltekit-superforms/server";
 import { addressSchema } from "$lib/schemas/storeSchema";
 import type { CartType } from "$lib/types/apiType";
+import { zod } from "sveltekit-superforms/adapters";
 
 export const load: PageServerLoad = (async ({ cookies }) => {
 	const cartId = cookies.get("__tm__cart");
@@ -50,7 +51,7 @@ export const load: PageServerLoad = (async ({ cookies }) => {
 		})
 		.json()) as ShippingOptionsRes;
 
-	const form = await superValidate(addressSchema);
+	const form = await superValidate(zod(addressSchema));
 
 	return { cart, addresses, options, form };
 }) satisfies PageServerLoad;
@@ -63,10 +64,7 @@ type Message = {
 
 export const actions = {
 	add: async ({ request, cookies }) => {
-		const form = await superValidate<typeof addressSchema, Message>(
-			request,
-			addressSchema,
-		);
+		const form = await superValidate(request, zod(addressSchema));
 
 		if (!form.valid) {
 			return message(form, { status: "error", text: "Formulaire invalide" });

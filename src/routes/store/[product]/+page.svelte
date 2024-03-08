@@ -9,6 +9,7 @@
   import { navigating } from "$app/stores";
     import SeoProduct from "$lib/components/SeoProduct.svelte";
     import { APPNAME, URL } from "$lib/constants";
+    import { zodClient } from "sveltekit-superforms/adapters";
 
   export let data: PageData;
   export let { product, related } = data;
@@ -16,7 +17,7 @@
   export let image: number = 0;
 
   const { form, errors, enhance, message, delayed } = superForm(data.form, {
-    validators: addToCartSchema,
+    validators: zodClient(addToCartSchema),
     onSubmit: ({ formData }) => {
       formData.set("variant", product.variants[variant].id);
     },
