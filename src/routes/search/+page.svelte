@@ -25,7 +25,7 @@
 
 <main class="w-screen lg:w-5/6 mx-auto">
   <header class="my-8 lg:my-12 w-full lg:w-1/2 mx-auto">
-    <form method="post" action="/search" use:enhance={() => {
+    <form method="post" use:enhance={() => {
             loading = true;
       
             return async ({ result }) => {

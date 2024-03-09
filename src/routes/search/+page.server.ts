@@ -14,6 +14,8 @@ export const actions = {
 				})
 				.json()) as SearchRes;
 
+			console.info(JSON.stringify(res.hits, null, 2));
+
 			return {
 				query,
 				data: res,
