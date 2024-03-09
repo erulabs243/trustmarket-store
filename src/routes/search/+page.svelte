@@ -4,6 +4,8 @@
   import { enhance } from "$app/forms";
     import type { SearchType } from "$lib/types/apiType";
     import { displayCurrency } from "$lib/utils/lang";
+    import Seo from "$lib/components/Seo.svelte";
+    import { APPNAME } from "$lib/constants";
 
   export let results: Array<SearchType>;
   export let query: string;
@@ -14,6 +16,12 @@
   $: results = [];
   $: loading = false;
 </script>
+<Seo 
+  title="Recherche"
+  description={`Recherchez vos produits sur ${APPNAME}`}
+  keywords={`${APPNAME}, Collections, RDC, Congo, Vente en ligne`}
+  url={`${URL}/search`}
+/>
 
 <main class="w-screen lg:w-5/6 mx-auto">
   <header class="my-8 lg:my-12 w-full lg:w-1/2 mx-auto">
@@ -21,6 +29,9 @@
             loading = true;
       
             return async ({ result }) => {
+
+              console.info(result);
+            
               results = result?.data?.data?.hits;
               query = result?.data?.data?.query;
               count = result?.data?.data?.estimatedTotalHits;
@@ -29,7 +40,7 @@
           }}
         class="w-full"
         >
-      <div class="form-control w-full flex flex-row items-center gap-2 lg:flex rounded-3xl bg-white pl-4">
+      <div class="form-control w-5/6 lg:w-full flex flex-row items-center gap-2 lg:flex rounded-3xl bg-white pl-4 mx-auto">
           <IconSearch size={24} stroke={1} />
           <input
             type="search"
@@ -37,8 +48,11 @@
             placeholder="Rechercher un produit..."
             class="input w-full bg-white rounded-3xl"
           />
-          <button type="submit" class="btn btn-secondary rounded-3xl">
+          <button type="submit" class="hidden lg:btn btn-secondary rounded-3xl">
             Rechercher
+          </button>
+          <button type="submit" class="btn btn-secondary rounded-3xl lg:hidden">
+            <IconSearch />
           </button>
       </div>
     </form>

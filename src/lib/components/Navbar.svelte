@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { UserSession } from "$lib/types/commons";
     import {page} from "$app/stores";
-  import { IconCategory, IconCategory2, IconHome, IconMail, IconMenu2, IconPhone, IconPhoneCall, IconSearch, IconShoppingBag, IconShoppingBagX,  IconUser } from "@tabler/icons-svelte";
+  import { IconCategory, IconCategory2, IconHome, IconLogin, IconLogout, IconMail, IconMenu2, IconPhone, IconPhoneCall, IconSearch, IconShoppingBag, IconShoppingBagX,  IconUser } from "@tabler/icons-svelte";
   import userStore from "$lib/stores/user";
     import { cartStore, cartTotalStore } from "$lib/stores/cart";
     import type { CategoryType, LineItemType } from "$lib/types/apiType";
@@ -25,9 +25,9 @@
 <div class="navbar bg-base-200/50 backdrop-blur-xl w-screen py-4 shadow-lg sticky top-0 z-40">
   <div class="w-full lg:w-5/6 mx-auto flex flex-col gap-2">
     <!-- HEAD NAVBAR -->
-    <div class="flex flex-row gap-8 w-screen lg:w-full">
+    <div class="flex flex-row gap-8 w-screen lg:w-full justify-between">
   <div class="flex lg:w-1/4">
-    <div class="dropdown sm:hidden">
+    <div class="dropdown md:hidden">
       <button tabindex="0" class="btn btn-ghost btn-circle btn-neutral">
         <IconMenu2 />
       </button>
@@ -99,14 +99,28 @@
               Contactez-nous
             </a>
           </li>
+    {#if user}
+        <li>
+          <a href="/cart">
+            <IconShoppingBag color="#3b5563" />
+            Mon panier
+          </a>
+        </li>
+
           <li>
-            <div class="w-full rounded-3xl flex flex-row items-center gap-2 mt-4">
-              <input type="search" class="input rounded-3xl w-full bg-white text-sm" placeholder="Rechercher un produit..." />
-                <button class="btn btn-secondary btn-circle">
-                  <IconSearch />
-                </button>
-            </div>
-          </li>
+            <a href="/auth/logout" >
+            <IconLogout color="#3b5563" />
+            Déconnexion
+          </a>
+        </li>
+    {:else}
+      <li>
+      <a href={`/auth/login?from=${$page.url.pathname === "/" ? "/home" : $page.url.pathname}`}>
+        <IconLogin color="#4b5563" />
+        Connexion
+      </a>
+      </li>
+    {/if}
         </div>
     </div>
     <a class="btn btn-ghost normal-case text-xl" href="/">
@@ -237,7 +251,7 @@
     </div>
     
     {#if user}
-    <div class="dropdown dropdown-end">
+    <div class="hidden md:dropdown dropdown-end">
       <label tabindex="0" class="btn btn-ghost btn-circle avatar">
         <div class="w-10 rounded-full">
           <img src="https://i.pravatar.cc/300" />
@@ -298,7 +312,7 @@
     <!-- END HEAD NAVBAR -->
 
     <!-- BOTTOM NAVBAR -->
-    <div class="hidden  flex-row gap-8 justify-between w-full">
+    <div class="hidden md:flex lg:hidden flex-row gap-8 justify-center w-full">
 
       <!-- MENU -->
       <ul class="menu menu-horizontal rounded-box">
@@ -372,7 +386,7 @@
       <!-- END MENU -->
 
       <!-- INFOS -->
-      <ul class="menu menu-horizontal">
+      <ul class="menu menu-horizontal hidden">
         <li>
           <p>
             <IconPhone color="#4b5563" />
