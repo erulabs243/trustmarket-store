@@ -1,15 +1,41 @@
 import api from "$lib/server/apiClient";
-import type { CollectionsRes, ProductRes } from "$lib/types/apiResponse";
-import type { PageData, PageServerLoad } from "./$types";
+import type {
+	CollectionsRes,
+	ProductRes,
+	CategoryRes,
+} from "$lib/types/apiResponse";
+import type { PageServerLoad } from "./$types";
 
 export const load = (async () => {
 	const products = (await api.get("products?limit=6").json()) as ProductRes;
 	const collections = (await api
-		.get("collections?limit=3")
+		.get("collections?limit=7")
 		.json()) as CollectionsRes;
+
+	const arrivals = collections.collections.filter(
+		(item) => item.handle === "arrivals",
+	);
+	const arrivalProducts = (await api
+		.get(`products?collection_id[]=${arrivals[0].id}`)
+		.json()) as ProductRes;
+
+	const otherCollections = collections.collections.filter(
+		(item) => item.handle !== "arrivals",
+	);
+
+	const categories = (await api
+		.get("product-categories?include_descendants_tree=false")
+		.json()) as CategoryRes;
+
+	const parentCategories = categories.product_categories.filter(
+		(item) => !item.parent_category_id,
+	);
 
 	return {
 		products,
-		collections,
+		collections: otherCollections,
+		arrival: arrivals[0],
+		arrivals: arrivalProducts,
+		categories: parentCategories,
 	};
 }) satisfies PageServerLoad;

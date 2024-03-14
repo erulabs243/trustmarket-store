@@ -5,11 +5,15 @@
   import type { PageData } from "./$types";
   import { navigating } from "$app/stores";
     import Seo from "$lib/components/Seo.svelte";
+    import CategoryCard from "$lib/components/CategoryCard.svelte";
 
   export let data: PageData;
   export let products = data.products;
   export let collections = data.collections;
-  export let latest = data.collections.collections[0];
+  export let arrivals = data.arrivals;
+  export let arrival = data.arrival;
+  export let categories = data.categories;
+
 </script>
 
 <Seo />
@@ -21,21 +25,35 @@
   </div>
 {:else}
 
-<!-- LATEST COLLECTION -->
-<div class="flex flex-col gap-4 my-4 lg:my-12 w-11/12 lg:w-5/6 mx-auto bg-orange-300 rounded-3xl p-8 lg:p-24 shadow-lg">
-  <h2 class="text-2xl lg:text-4xl font-bold text-gray-700">{latest.title}</h2>
-  {#if latest.metadata?.description}
-    <p class="text-gray-700">{latest.metadata.description}</p>
-  {/if}
-  <a
-    href={`/store/collections/${latest.handle}`}
-    class="btn btn-neutral rounded-3xl self-start my-4 lg:my-8"
-  >
-    Voir la collection
-    <IconArrowRight />
-  </a>
+<!-- ARRIVALS -->
+<div class="flex flex-col gap-20 my-20 w-screen lg:w-5/6 mx-auto">
+  <header>
+    <h2 class="text-center text-xl lg:text-2xl text-primary font-bold uppercase">{arrival.title}</h2>
+    <p class="text-center px-8 text-gray-700">{arrival?.metadata?.description}</p>
+  </header>
+  <section class="grid grid-cols-2 gap-4 px-4 md:grid-cols-3 lg:grid-cols-6">
+    {#each arrivals.products as product}
+      <ProductCard {product} />
+    {/each}
+  </section>
 </div>
-<!-- END LATEST COLLECTION -->
+
+<!-- /ARRIVALS -->
+
+
+<!-- CATEGORIES -->
+<div class="flex flex-col gap-20 my-20 lg:my-32 bg-orange-200 py-12 lg:py-24 shadow-[0_0_64px_0_rgba(30,30,30,0.2)]">
+  <header class="flex flex-col items-center">
+    <h2 class="text-center text-xl lg:text-2xl text-primary font-bold uppercase">Nos catégories</h2>
+    <p class="text-center px-8 text-gray-700">Explorez tous nos produits par catégorie</p>
+  </header>
+  <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12 w-screen lg:w-5/6 mx-auto">
+    {#each categories as category }
+      <CategoryCard {category} />
+    {/each}
+  </section>
+</div>
+<!-- END CATEGORIES -->
 
 <!-- RECENT PRODUCTS -->
 <div class="flex flex-col gap-20 my-20 w-screen lg:w-5/6 mx-auto">
@@ -66,8 +84,8 @@
       <IconArrowRight />
     </a>
   </header>
-  <section class="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12 w-screen lg:w-5/6 mx-auto">
-    {#each collections.collections as collection}
+  <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12 w-screen lg:w-5/6 mx-auto">
+    {#each collections as collection}
       <CollectionCard {collection} />
     {/each}
   </section>

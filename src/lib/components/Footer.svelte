@@ -33,15 +33,6 @@
     </div>
   </nav>
   <nav>
-    <header class="footer-title">Services</header> 
-    <div class="flex flex-col">
-      <a class="link link-hover">Branding</a> 
-      <a class="link link-hover">Design</a> 
-      <a class="link link-hover">Marketing</a> 
-      <a class="link link-hover">Advertisement</a>
-    </div>
-  </nav> 
-  <nav>
     <header class="footer-title">TrustMarket</header> 
     <div class="flex flex-col">
       <a class="link link-hover" href="/about">A propos de nous</a> 
@@ -49,14 +40,6 @@
       <a class="link link-hover" href="/">Travailler avec nous</a>
     </div>
   </nav> 
-  <nav>
-    <header class="footer-title">Legal</header> 
-    <div class="flex flex-col">
-      <a class="link link-hover">Terms of use</a> 
-      <a class="link link-hover">Privacy policy</a> 
-      <a class="link link-hover">Cookie policy</a>
-    </div>
-  </nav>
   </div>
   <aside class="items-start grid-flow-col md:hidden">
       <img src="$lib/assets/logo-icon.png" class="w-12" />
