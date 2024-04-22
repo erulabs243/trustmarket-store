@@ -3,14 +3,19 @@ import type {
 	CollectionsRes,
 	ProductRes,
 	CategoryRes,
+	CustomProductRes,
 } from "$lib/types/apiResponse";
 import type { PageServerLoad } from "./$types";
 
 export const load = (async () => {
-	const products = (await api.get("products?limit=6").json()) as ProductRes;
+	const products = (await api.get("products?limit=96").json()) as ProductRes;
 	const collections = (await api
 		.get("collections?limit=7")
 		.json()) as CollectionsRes;
+
+	const mostSold = (await api
+		.get("products/most-sold")
+		.json()) as CustomProductRes;
 
 	const arrivals = collections.collections.filter(
 		(item) => item.handle === "arrivals",
@@ -31,8 +36,11 @@ export const load = (async () => {
 		(item) => !item.parent_category_id,
 	);
 
+	console.info(JSON.stringify(mostSold, null, 2));
+
 	return {
 		products,
+		mostSold: mostSold,
 		collections: otherCollections,
 		arrival: arrivals[0],
 		arrivals: arrivalProducts,

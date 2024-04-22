@@ -1,5 +1,5 @@
 import api from "$lib/server/apiClient";
-import type { CartRes, CategoryRes } from "$lib/types/apiResponse";
+import type { AnnoncesRes, CartRes, CategoryRes } from "$lib/types/apiResponse";
 import type { LayoutServerLoad } from "./$types";
 
 export const load = (async ({ cookies }) => {
@@ -15,5 +15,12 @@ export const load = (async ({ cookies }) => {
 		cart = (await api.get(`carts/${cartId}`).json()) as CartRes;
 	}
 
-	return { user, cart, categories: productCategories.product_categories };
+	const annonces = (await api.get("annonces").json()) as AnnoncesRes;
+
+	return {
+		user,
+		cart,
+		categories: productCategories.product_categories,
+		annonces: annonces.annonces,
+	};
 }) satisfies LayoutServerLoad;

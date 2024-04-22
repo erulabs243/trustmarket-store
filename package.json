@@ -33,6 +33,7 @@
   "dependencies": {
     "@fontsource-variable/inter": "^5.0.14",
     "@tabler/icons-svelte": "^2.39.0",
+    "embla-carousel-svelte": "^8.0.2",
     "ky": "^1.1.0",
     "validator": "^13.11.0"
   }

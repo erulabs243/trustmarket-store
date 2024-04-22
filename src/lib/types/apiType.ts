@@ -646,3 +646,20 @@ export type SearchType = {
 	id: string;
 	variants: Array<VariantType>;
 };
+
+export type CustomProduct = {
+	product: string;
+	product_id: string;
+	thumbnail: string;
+	quantity: string;
+	price: number;
+	handle: string;
+};
+
+export type Annonce = {
+	id: string;
+	title: string;
+	url: Nullable<string>;
+	created_at: Date | string;
+	updated_at: Date | string;
+};

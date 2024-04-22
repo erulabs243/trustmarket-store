@@ -1,14 +1,16 @@
 <script lang="ts">
     import type { UserSession } from "$lib/types/commons";
     import {page} from "$app/stores";
+    import emblaCarouselSvelte from "embla-carousel-svelte";
   import { IconCategory, IconCategory2, IconHome, IconLogin, IconLogout, IconMail, IconMenu2, IconPhone, IconPhoneCall, IconSearch, IconShoppingBag, IconShoppingBagX,  IconUser } from "@tabler/icons-svelte";
   import userStore from "$lib/stores/user";
     import { cartStore, cartTotalStore } from "$lib/stores/cart";
-    import type { CategoryType, LineItemType } from "$lib/types/apiType";
+    import type { Annonce, CategoryType, LineItemType } from "$lib/types/apiType";
     import { displayCurrency } from "$lib/utils/lang";
     import { PHONE_NUM_AIRTEL } from "$lib/constants";
 
   export let categories: Array<CategoryType> = [];
+  export let annonces: Array<Annonce> = [];
 
   let user: UserSession | null = $userStore;
   let cart: Array<LineItemType>;
@@ -22,6 +24,25 @@
   // FIXME close submenus after clicking outside on the document
 </script>
 
+<div class="w-full bg-primary py-1">
+  <div class="embla" use:emblaCarouselSvelte>
+    <div class="embla__container">
+  {#each annonces as annonce}
+    <div class="embla__slide w-full">
+  	{#if annonce.url}
+  	  <p class="text-center">
+    	<a href={annonce.url}>
+        {annonce.title}
+    	</a>
+  	  </p>
+    {:else}
+      <p class="text-center">{annonce.title}</p>
+    {/if}
+    </div>
+  {/each}
+    </div>
+  </div>
+</div>
 <div class="navbar bg-base-200/50 backdrop-blur-xl w-screen py-4 shadow-lg sticky top-0 z-40">
   <div class="w-full lg:w-5/6 mx-auto flex flex-col gap-2">
     <!-- HEAD NAVBAR -->

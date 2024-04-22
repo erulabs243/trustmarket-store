@@ -14,6 +14,7 @@
   let cartTotal: number;
   let user: UserSession | null;
   let categories = data.categories;
+  let annonces = data.annonces;
   
   $cartStore = data.cart?.cart.items ?? [];
   $cartTotalStore = Number(data.cart?.cart.total) ?? 0;
@@ -32,7 +33,7 @@
 
 <div class="w-screen">
 
-  <Navbar {categories} />
+  <Navbar {categories} {annonces} />
     <slot />
   <Footer />
 

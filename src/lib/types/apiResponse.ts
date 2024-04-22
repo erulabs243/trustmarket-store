@@ -1,7 +1,9 @@
 import type {
+	Annonce,
 	CartType,
 	CategoryType,
 	CollectionType,
+	CustomProduct,
 	CustomerType,
 	OrderType,
 	ProductType,
@@ -79,4 +81,12 @@ export interface SearchRes {
 	hits: Array<SearchType>;
 	query: string;
 	estimatedTotalHits: number;
+}
+
+export interface CustomProductRes {
+	products: Array<ProductType>;
+}
+
+export interface AnnoncesRes {
+	annonces: Array<Annonce>;
 }

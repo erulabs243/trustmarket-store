@@ -1,6 +1,7 @@
 <script lang="ts">
   import CollectionCard from "$lib/components/CollectionCard.svelte";
   import ProductCard from "$lib/components/ProductCard.svelte";
+  import CProductCard from "$lib/components/CProductCard.svelte";
   import { IconArrowRight } from "@tabler/icons-svelte";
   import type { PageData } from "./$types";
   import { navigating } from "$app/stores";
@@ -13,6 +14,7 @@
   export let arrivals = data.arrivals;
   export let arrival = data.arrival;
   export let categories = data.categories;
+  export let mostSold = data.mostSold;
 
 </script>
 
@@ -55,21 +57,21 @@
 </div>
 <!-- END CATEGORIES -->
 
-<!-- RECENT PRODUCTS -->
+
+<!-- MOST SOLD -->
 <div class="flex flex-col gap-20 my-20 w-screen lg:w-5/6 mx-auto">
   <header>
-    <h2 class="text-center text-xl lg:text-2xl text-primary font-bold uppercase">Produits récents</h2>
-    <p class="text-center px-8 text-gray-700">
-      Retrouvez chaque jour de nouveaux produits sur notre boutique
-    </p>
+    <h2 class="text-center text-xl lg:text-2xl text-primary font-bold uppercase">Meilleures ventes</h2>
+    <p class="text-center px-8 text-gray-700">Choisissez parmi nos produits les plus vendus</p>
   </header>
-  <section class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 px-4">
-    {#each products.products as product}
+  <section class="grid grid-cols-2 gap-4 px-4 md:grid-cols-3 lg:grid-cols-6">
+    {#each mostSold.products as product}
       <ProductCard {product} />
     {/each}
   </section>
 </div>
-<!-- END RECENT PRODUCTS -->
+
+<!-- /MOST SOLD -->
 
 <!-- LATEST COLLECTIONS -->
 <div class="flex flex-col gap-20 my-20 lg:my-32 bg-orange-200 py-12 lg:py-24 shadow-[0_0_64px_0_rgba(30,30,30,0.2)]">
@@ -92,21 +94,15 @@
 </div>
 <!-- END LATEST COLLECTIONS -->
 
-<!-- BEST SOLD PRODUCTS -->
+<!-- LATEST PRODUCTS -->
 <div class="flex flex-col gap-20 my-20 w-screen lg:w-5/6 mx-auto">
-  <header>
-    <h2 class="text-center text-xl lg:text-2xl text-primary font-bold uppercase">Les plus vendus</h2>
-    <p class="text-center px-8 text-gray-700">
-      Ils ont aimé ! Vous aimerez certainement aussi...
-    </p>
-  </header>
   <section class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 px-4">
     {#each products.products as product}
       <ProductCard {product} />
     {/each}
   </section>
 </div>
-<!-- END BEST SOLD PRODUCTS -->
+<!-- /LATEST PRODUCTS -->
 
 {/if}
 
