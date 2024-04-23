@@ -36,8 +36,6 @@ export const load = (async () => {
 		(item) => !item.parent_category_id,
 	);
 
-	console.info(JSON.stringify(mostSold, null, 2));
-
 	return {
 		products,
 		mostSold: mostSold,

@@ -1,10 +1,13 @@
 <script lang="ts">
-    import { DESCRIPTION, INFO_EMAIL, PHONE_NUM_AFRICELL, PHONE_NUM_AIRTEL } from "$lib/constants";
+    import { APPNAME, DESCRIPTION, INFO_EMAIL, PHONE_NUM_AFRICELL, PHONE_NUM_AIRTEL, URL } from "$lib/constants";
     import { IconBrandInstagram, IconBrandTelegram, IconBrandWhatsapp, IconBrandYoutube, IconMail, IconPhone } from "@tabler/icons-svelte";
     import Social from "./Social.svelte";
+    import Seo from "./Seo.svelte";
 
   const year = new Date().getFullYear();
 </script>
+
+<Seo description="Politique de confidentialité" keywords={`${APPNAME}, politique de confidentialité, utilisation des données`} metaType="page" url={`${URL}/legals/privacy`} />
 
 <div class="w-screen bg-base-200 mt-12 pt-12 shadow-[0_-8px_36px_0_rgba(30,30,30,0.3)]">
 <footer class="footer p-10 w-screen lg:w-5/6 mx-auto bg-base-200 text-base-content">
@@ -38,6 +41,7 @@
       <a class="link link-hover" href="/about">A propos de nous</a> 
       <a class="link link-hover" href="/contact">Contactez-nous</a> 
       <a class="link link-hover" href="/">Travailler avec nous</a>
+      <a href="/legals/privacy" class="link link-hover">Politique de confidentialité</a>
     </div>
   </nav> 
   </div>
