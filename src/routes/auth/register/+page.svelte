@@ -12,6 +12,7 @@
   export let error: string;
 
   const from = $page.url.search.substring($page.url.search.indexOf("?") + 1)
+  const redirectUrl = from.includes("home") ? "/" : from.substring(from.indexOf("=") + 1);
 
   const {form, enhance, errors, delayed} = superForm(data.form, {
     validators: zodClient(registrationSchema),
@@ -24,8 +25,7 @@
           error = message.message;
         } else {
           $userStore = result.data.user;
-          const url = from.includes("home") ? "/" : `/${from}`;
-          goto(url);
+          goto(redirectUrl);
         }
     }
   })

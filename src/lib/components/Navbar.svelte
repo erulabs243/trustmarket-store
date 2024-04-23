@@ -2,6 +2,7 @@
     import type { UserSession } from "$lib/types/commons";
     import {page} from "$app/stores";
     import emblaCarouselSvelte from "embla-carousel-svelte";
+    import Autoplay from "embla-carousel-autoplay";
   import { IconCategory, IconCategory2, IconHome, IconLogin, IconLogout, IconMail, IconMenu2, IconPhone, IconPhoneCall, IconSearch, IconShoppingBag, IconShoppingBagX,  IconUser } from "@tabler/icons-svelte";
   import userStore from "$lib/stores/user";
     import { cartStore, cartTotalStore } from "$lib/stores/cart";
@@ -21,22 +22,40 @@
 
   userStore.subscribe(value => user = value);
 
+  let options = { loop: true };
+  let plugins = [Autoplay()];
+  
+
   // FIXME close submenus after clicking outside on the document
 </script>
 
+<style>
+  .embla {
+    overflow: hidden;
+  }
+  .embla__container {
+    display: flex;
+  }
+  .embla__slide {
+    flex: 0 0 100%;
+    min-width: 0;
+  }
+</style>
+
+ 
 <div class="w-full bg-primary py-1">
-  <div class="embla" use:emblaCarouselSvelte>
+  <div class="embla" use:emblaCarouselSvelte={{ options, plugins }}>
     <div class="embla__container">
   {#each annonces as annonce}
     <div class="embla__slide w-full">
   	{#if annonce.url}
-  	  <p class="text-center">
+  	  <p class="text-center text-sm">
     	<a href={annonce.url}>
         {annonce.title}
     	</a>
   	  </p>
     {:else}
-      <p class="text-center">{annonce.title}</p>
+      <p class="text-center text-sm">{annonce.title}</p>
     {/if}
     </div>
   {/each}
@@ -283,7 +302,7 @@
         class="menu menu-md dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-72"
       >
         <li>
-          <a class="justify-between">
+          <a class="justify-between" href="/user/profile">
             <p class="flex flex-row items-center gap-1">
               <IconUser color="#707070" />
               Profile

@@ -13,9 +13,7 @@ export const load = (async () => {
 		.get("collections?limit=7")
 		.json()) as CollectionsRes;
 
-	const mostSold = (await api
-		.get("products/most-sold")
-		.json()) as CustomProductRes;
+	const mostSold = (await api.get("most-sold").json()) as CustomProductRes;
 
 	const arrivals = collections.collections.filter(
 		(item) => item.handle === "arrivals",
