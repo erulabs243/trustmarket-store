@@ -19,6 +19,8 @@ export const load = (async ({ cookies }) => {
 
 		cookies.delete("__tm__session", { path: "/" });
 		cookies.delete("__tm__cart", { path: "/" });
+		cookies.delete("connect.sid", { path: "/" });
+		cookies.delete("ajs_user_id", { path: "/" });
 
 		return { logged: false, user: null };
 	} catch (err) {

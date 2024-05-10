@@ -7,8 +7,6 @@
   const year = new Date().getFullYear();
 </script>
 
-<Seo description="Politique de confidentialité" keywords={`${APPNAME}, politique de confidentialité, utilisation des données`} metaType="page" url={`${URL}/legals/privacy`} />
-
 <div class="w-screen bg-base-200 mt-12 pt-12 shadow-[0_-8px_36px_0_rgba(30,30,30,0.3)]">
 <footer class="footer p-10 w-screen lg:w-5/6 mx-auto bg-base-200 text-base-content">
   <aside class="items-start grid-flow-col hidden md:flex">
